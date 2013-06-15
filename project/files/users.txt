@@ -1,0 +1,11 @@
+test:test:1234567:kac162@pitt.edu:Advisorson:Addy:1
+Swordsman:IAmNotLeftHanded:1234567:kac162@pitt.edu:Montoya:Inigo:0
+Spaceman1:BeamMeUp10:7654321:kac162@pitt.edu:Kirk:James:0
+Spaceman22:EarlGreyHot:2222222:kac162@pitt.edu:Picard:JeanLuc:0
+DarkSide:IAmYourAdvisor:3333333:kac162@pitt.edu:Skywalker:Anakin:1
+Bearer3:I<3BagEnd:4444444:kac162@pitt.edu:Baggins:Frodo:0
+ShellHead:IMIronMan:5555555:kac162@pitt.edu:Stark:Anthony:1
+WebHead:Spidey23:6666666:kac162@pitt.edu:Parker:Peter:0
+Neo:IAmTheOne:7777777:kac162@pitt.edu:Anderson:Thomas:0
+TheBride:BlackMamba11:8888888:kac162@pitt.edu:Kiddo:Beatrix:0
+Seeker1:ExpectoPatronum:9999999:kac162@pitt.edu:Potter:Harry:0
