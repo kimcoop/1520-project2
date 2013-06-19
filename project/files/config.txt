@@ -1,0 +1,8 @@
+HOSTNAME
+localhost
+USERNAME
+reinhold
+PASSWORD
+secret_hash
+DATABASE
+wordpress

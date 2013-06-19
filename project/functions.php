@@ -1,5 +1,6 @@
 <?php
 
+require_once('models/user.php');
 require_once('models/course.php');
 require_once('models/requirement.php');
 
@@ -17,42 +18,19 @@ define( "MAILER_SUBJECT", "Your AdvisorCloud Credentials" );
 define( "MAILER_SENDER", "kac162@pitt.edu" );
 
 function signin( $user_id, $password ) {
-  $valid = false;
-  if ( $user_id && $password ) {
+  $user = User::signin( $user_id, $password );
 
-    $file_handle = fopen( USERS_FILE , "r" );
-    
-    while ( !feof($file_handle) ) {
-      $line = fgets( $file_handle );
-      $pieces = explode( ":", $line );
-      if ( $pieces[0] == $user_id && $pieces[1] == $password ) {
-        $valid = true;
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['psid'] = $pieces[2];
-        $_SESSION['email'] = $pieces[3];
-        $_SESSION['last_name'] = $pieces[4];
-        $_SESSION['first_name'] = $pieces[5];
-        $_SESSION['full_name'] = "$pieces[5] $pieces[4]";
-        $_SESSION['access_level'] = $pieces[6];
+  if ( $user ) {
+    $_SESSION[ 'user' ] = $user;
+    $_SESSION[ 'viewing_psid' ] = $user->psid; // so we can use one variable for both roles. overwrite if/when advisor looks up student
 
-        $expire = time() + 60 * 60 * 24 * 30;
-        setcookie( "user_id", $user_id, $expire ); // set cookie to what user passed in
-
-        // so we can use one variable for both roles. overwrite if/when advisor looks up student
-        $_SESSION['viewing_psid'] = $_SESSION['psid'];
-        break;
-      }
-    }
-
-    fclose( $file_handle );
-    
+    if ( is_student() )
+      $_SESSION['user_courses'] = get_courses_for_user( $_SESSION['psid'], $_SESSION['all_courses'] );
   }
+  // $expire = time() + 60 * 60 * 24 * 30;
+  // setcookie( "user_id", $user_id, $expire ); // set cookie to what user passed in
 
-  if ( $valid && is_student() ) {
-    $_SESSION['user_courses'] = get_courses_for_user( $_SESSION['psid'], $_SESSION['all_courses'] );
-  }
-
-  return $valid;
+  return $user;
 }
 
 function clear_search() {
@@ -63,15 +41,15 @@ function clear_search() {
 }
 
 function is_logged_in() {
-  return isset( $_SESSION['user_id'] );
+  return isset( $_SESSION['user'] );
 }
 
 function is_student() {
-  return $_SESSION['access_level'] == STUDENT_ACCESS_LEVEL;
+  return $_SESSION['user']->get_access_level() == STUDENT_ACCESS_LEVEL;
 }
 
 function is_advisor() {
-  return $_SESSION['access_level'] == ADVISOR_ACCESS_LEVEL;
+  return $_SESSION['user']->get_access_level() == ADVISOR_ACCESS_LEVEL;
 }
 
 function is_viewing_student() {
@@ -407,54 +385,5 @@ function requirements_met( $psid, $requirement ) {
     return $advising_sessions;
   }
 
-  /*
-  *
-  * MAIL FUNCTIONS
-  *
-  */
-
-  function get_user_details( $user_id ) {
-    $file_handle = fopen( USERS_FILE , "r" );
-    $details = NULL;
-      
-    while ( !feof($file_handle) ) {
-      $line = fgets( $file_handle );
-      $pieces = explode( ":", $line );
-      if ( $pieces[0] == $user_id ) {
-        $details = array( "email"=> $pieces[3], "password"=>$pieces[1] );
-        break;
-      }
-    }
-
-    fclose( $file_handle );
-    return $details;
-    
-  }
-
-  function send_password( $user_id ) {
-
-    $details = get_user_details( $user_id );
-
-    if ( isset( $details ) ) {
-
-      $email = $details[ 'email' ];
-      $password = $details[ 'password' ];
-      $format = "Your password is %s. Thanks! -- The Advisor Cloud Team";
-
-      $to      = $email;
-      $subject = MAILER_SUBJECT;
-      $message = sprintf( $format, $password );
-      $headers = 'From: ' .MAILER_SENDER . '' . "\r\n" .
-          'Reply-To: ' .MAILER_SENDER . '' . "\r\n" .
-          'X-Mailer: PHP/' . phpversion();
-
-      mail( $to, $subject, $message, $headers );
-      return true;
-
-    } else {
-      return false;
-    }
-
-  }
 
 ?>
