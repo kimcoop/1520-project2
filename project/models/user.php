@@ -1,11 +1,12 @@
 <?php
 
   class User extends DAO_Base {
-    public $user_id, $email, $last_name, $first_name;
-    private $psid, $password, $access_level;
+    private $user_id, $email, $last_name, $first_name, $psid, $password, $access_level;
+    public $table;
 
     function __construct() {
       parent::__construct( 'users' );
+      $this->table = 'users';// TODO - can i do this here? what's the point?
     }
 
 
@@ -13,6 +14,21 @@
       $hashed_password = hash( 'sha256', $new_password );
       $this->password = $hashed_password;
       $this->save(); //TODO
+    }
+
+    public function get_user_id() {
+      return $this->user_id;
+    }
+
+    public function get_email() {
+      return $this->email;
+    }
+
+    public function get_last_name() {
+      return $this->last_name;
+    }
+    public function get_first_name() {
+      return $this->first_name();
     }
 
 
@@ -63,6 +79,29 @@
       $user->access_level = 0;
       // TODO  - restore from db
       return $user;
+    }
+
+    public static function find_by( $field, $value ) {
+      parent::find_by( $this->table, $field, $value );
+
+    }
+
+    public static function get_courses_for_user( $psid ) {
+      $all_courses = Course::populate_courses( COURSES_FILE );
+    }
+
+    public static function find_by_full_name( $full_name ) {
+       // TODO - where does this method belong? parent class?
+      $user = new User();
+      $user->password = $password;
+      $user->user_id = $user_id;
+      $user->psid = 1234567;
+      $user->email = "kac162@pitt.edu";
+      $user->first_name = "Inigo";
+      $user->last_name = "Montoya";
+      $user->access_level = 0;
+      // TODO  - restore from db
+      return $user; 
     }
 
 

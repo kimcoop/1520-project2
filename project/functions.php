@@ -103,81 +103,17 @@ function get_root_url() {
   */
 
 session_start();
-$_SESSION['all_courses'] = populate_courses(); // populate onload for faster recall. TODO: make global not session
 
-function populate_courses() {
-  // read in and parse the COURSES_FILE to collect the list
-  $courses = array();
-  $file_handle = fopen( COURSES_FILE , "r" );
+
+function populate_reqs( REQS_FILE ) {
   
-  while ( !feof($file_handle) ) {
-    $line = fgets( $file_handle );
-    $course = new Course( $line );
-    $courses[] = $course;
-  }
-
-  fclose( $file_handle );
-  return $courses;
-
-}
-
-function populate_reqs() {
-  // read in and parse the REQS_FILE to collect the list
-  $reqs = array();
-  $file_handle = fopen( REQS_FILE , "r" );
-  
-  while ( !feof($file_handle) ) {
-    $line = fgets( $file_handle );
-    $req = new Requirement( $line );
-    $reqs[] = $req;
-  }
-
-  fclose( $file_handle );
-  return $reqs;
 
 }
 
 
-function get_courses_for_user( $psid, $courses ) {
-  // collect which courses from the $courses array map to the passed-in people soft id
-  $user_courses = array();
-
-  foreach( $courses as $course ) {
-    if ( $course->psid == $psid ) {
-      $user_courses[] = $course;
-    }
-  }
-  
-  return $user_courses;
-}
-
-function get_courses_by_term( $psid, $courses ) {
-  
-  foreach( $courses as $course ) {
-    if ( $course->psid == $psid ) {
-      $courses_by_term[ $course->term ][] = $course;
-    }
-  }
-  return $courses_by_term;
-}
-
-function get_courses_by_department( $psid, $courses ) {
-  
-  $courses_by_department = array();
-
-  foreach( $courses as $course ) {
-    if ( $course->psid == $psid ) {
-      $courses_by_department[ $course->department ][] = $course;
-    }
-  }
-  
-  return $courses_by_department;
-}
-
-function get_requirements( $psid ) {
+function get_requirements() {
   // populate a list of graduation requirements for the given $psid
-  $graduation_reqs = populate_reqs();
-  return $graduation_reqs;
+  return Requirements::populate_requirements( REQS_FILE );
 }
 
 
@@ -231,39 +167,16 @@ function requirements_met( $psid, $requirement ) {
   */
 
   function find_user_by_psid_or_name( $search_term ) {
-    $valid = false;
     if ( $search_term ) {
-
-      $file_handle = fopen( USERS_FILE , "r");
-      
-      while ( !feof($file_handle) ) {
-        $line = fgets( $file_handle );
-        $pieces = explode( ":", $line );
-        $psid = $pieces[2];
-        $full_name = "$pieces[5] $pieces[4]"; // the advisor may search by people soft ID or first name - last name, so search for both matches
-        if ( $psid == $search_term || $full_name == $search_term ) {
-
-          $valid = true;
-          $_SESSION['student']['user_id'] = $pieces[0];
-          $_SESSION['student']['psid'] = $pieces[2];
-          $_SESSION['student']['email'] = $pieces[3];
-          $_SESSION['student']['last_name'] = $pieces[4];
-          $_SESSION['student']['first_name'] = $pieces[5];
-          $_SESSION['student']['full_name'] = $full_name;
-          $_SESSION['student']['access_level'] = $pieces[6];
-
-          $_SESSION['viewing_psid'] = $_SESSION['student']['psid']; // one variable to key off for both user roles (student & advisor)
-          $_SESSION['user_courses'] = get_courses_for_user( $_SESSION['viewing_psid'], $_SESSION['all_courses'] );
-
-          break;
-        }
-      }
-
-      fclose( $file_handle );
-      
+      $user = User::find_by( 'id', $search_term );
+      if ( !$user ) 
+        $user = User::find_by( 'full_name', $search_term ); // this is wrong (TODO - going to have to get clever here)
+      return isset( $user );
     }
+    return false;
+  }
 
-    return $valid;
+  function set_viewing_student( $student_user ) {
 
   }
 

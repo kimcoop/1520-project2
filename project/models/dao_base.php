@@ -1,23 +1,13 @@
 <?php
 
   class DAO_Base {
-    private $db;
-    private $table = NULL;
-    private $db_host;
-    private $db_name;
-    private $db_user;
-    private $db_password;
+    private $db_host, $db_name, $db_user, $db_password;
 
     function __construct( $db_host, $db_name, $db_user, $db_password ) {
       $this->db_host=$db_host;
       $this->db_name=$db_name;
       $this->db_user=$db_user;
       $this->db_password=$db_password;
-    }
-
-    function __construct( $db, $table ) {
-      $this->db = $db;
-      $this->table = $table;
     }
 
     function db_connect() {
@@ -50,6 +40,10 @@
 
     function check_errors( $sql ) {
       // TODO
+    }
+
+    function find_by( $table, $field='id', $value ) {
+      // TODO 
     }
 
     function get_one( ) {

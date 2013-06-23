@@ -72,6 +72,22 @@
           echo ", ";
       }
     }
+
+    public static function populate_requirements( $filename ) {
+      // read in and parse the REQS_FILE to collect the list
+      $reqs = array();
+      $file_handle = fopen( $filename, "r" );
+      
+      while ( !feof($file_handle) ) {
+        $line = fgets( $file_handle );
+        $req = new Requirement( $line );
+        $reqs[] = $req;
+      }
+
+      fclose( $file_handle );
+      return $reqs;
+    }
+
   }
 
 ?>

@@ -37,6 +37,51 @@
             $this->psid
             $this->grade";
     }
+
+    public static function populate_courses() {
+      $courses = array();
+
+      // TODO: pull from db
+      $file_handle = fopen( $filename, "r" );
+      
+      while ( !feof($file_handle) ) {
+        $line = fgets( $file_handle );
+        $course = new Course( $line );
+        $courses[] = $course;
+      }
+
+      fclose( $file_handle );
+      return $courses;
+    }
+
+    public static function get_courses_for_user( $psid ) {
+      // collect which courses map to the passed-in psid
+      $courses = self::populate_courses();
+      $user_courses = array();
+
+      foreach( $courses as $course ) {
+        if ( $course->psid == $psid ) {
+          $user_courses[] = $course;
+        }
+      }
+      
+      return $user_courses;
+    }
+
+    public static function get_courses_by( $grouping, $psid ) {
+      $all_courses = self::populate_courses();
+      $courses = array();
+      foreach( $all_courses as $course ) {
+        if ( $course->psid == $psid ) {
+          if ( $grouping == 'term' )
+            $courses[ $course->term ][] = $course; // TODO - better?
+          else
+            $courses[ $course->department ][] = $course;
+        }
+      }
+      return $courses;
+    }
   }
+
 
 ?>

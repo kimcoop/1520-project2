@@ -57,11 +57,10 @@
 
   } elseif ( isset($_GET['student_search_term']) ) {
 
-    if ( find_user_by_psid_or_name( $_GET['student_search_term'] )) {
-      $name = $_SESSION['student']['full_name'];
-      display_notice( "Viewing report for $name.", 'success' );
-      $user_id = $_SESSION['student']['user_id'];
-      header( "Location: advisor.php?student_id=$user_id" );
+    if ( $user = find_user_by_psid_or_name( $_GET['student_search_term'] )) {
+      set_viewing_student( $user );
+      display_notice( "Viewing report for $user->get_full_name().", 'success' );
+      header( "Location: advisor.php?student_id=$user->get_user_id()" );
       exit();
     } else {
       $search = $_GET['student_search_term'];
