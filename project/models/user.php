@@ -1,14 +1,17 @@
 <?php
 
-  class User extends DAO_Base {
-    private $user_id, $email, $last_name, $first_name, $psid, $password, $access_level;
-    public $table;
+  class User {
+    private $access_level, $email, $first_name, $last_name, $password, $psid, $user_id;
 
-    function __construct() {
-      parent::__construct( 'users' );
-      $this->table = 'users';// TODO - can i do this here? what's the point?
+    function __construct( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id ) {
+      $this->access_level = $access_level;
+      $this->email = $email;
+      $this->first_name = $first_name;
+      $this->last_name = $last_name;
+      $this->password = $password;
+      $this->psid = $psid;
+      $this->user_id = $user_id;
     }
-
 
     public function set_password( $new_password ) {
       $hashed_password = hash( 'sha256', $new_password );
@@ -27,10 +30,10 @@
     public function get_last_name() {
       return $this->last_name;
     }
+
     public function get_first_name() {
       return $this->first_name();
     }
-
 
     public function get_psid() {
       return $this->psid;
@@ -61,7 +64,7 @@
 
     }
 
-    public static password_is_correct( $user_id, $password ) {
+    public static function password_is_correct( $user_id, $password ) {
       $hashed_password = hash( 'sha256', $password );
       $user = self::find_by_id( $user_id );
       return $hashed_password == $user->password;
@@ -82,12 +85,7 @@
     }
 
     public static function find_by( $field, $value ) {
-      parent::find_by( $this->table, $field, $value );
-
-    }
-
-    public static function get_courses_for_user( $psid ) {
-      $all_courses = Course::populate_courses( COURSES_FILE );
+      // parent::query_single( $this->table, $field, $value );
     }
 
     public static function find_by_full_name( $full_name ) {

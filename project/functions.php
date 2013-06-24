@@ -102,18 +102,11 @@ function get_root_url() {
   *
   */
 
-session_start();
-
-
-function populate_reqs( REQS_FILE ) {
-  
-
-}
-
 
 function get_requirements() {
   // populate a list of graduation requirements for the given $psid
-  return Requirements::populate_requirements( REQS_FILE );
+  // return Requirements::populate_requirements( REQS_FILE );
+  return Requirement::find_all();
 }
 
 
@@ -122,7 +115,7 @@ function get_user_course_record( $psid, $department, $number ) {
   foreach( $_SESSION['user_courses'] as $user_course ) {
 
     // ensure course grade is passing, course matches req department and number
-    if ( $user_course->is_passing_grade() && $user_course->department == $department && $user_course->number == $number ) {
+    if ( $user_course->is_passing_grade() && $user_course->department == $department && $user_course->course_number == $number ) {
       return $user_course;
     }
 

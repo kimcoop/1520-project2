@@ -1,7 +1,8 @@
 <?php
 
-  class Requirement {
+  class Requirement extends DAO_Base {
     public $title, $course_options, $satisfied, $is_elective;
+    public static $table = 'requirements';
 
     function __construct( $line ) {
       $pieces = explode( ":", $line );
@@ -71,6 +72,11 @@
         if ( $index != count($this->course_options) -1 )
           echo ", ";
       }
+    }
+
+    public static function find_all() {
+      // TODO
+      return parent::find_all( 'requirements' );
     }
 
     public static function populate_requirements( $filename ) {
