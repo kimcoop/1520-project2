@@ -1,22 +1,16 @@
 <?php
 
 
-  include( 'project/models/user.php' );
-  include( 'project/models/user_factory.php' );
-  
-  define( "USERS_FILE", 'project/files/sample_users.txt' );
-  define( "COURSES_FILE", 'project/files/sample_courses.txt' );
-  define( "REQS_FILE", 'project/files/sample_reqs.txt' );
-  
-  function create_connection() {
-    $db = new mysqli( 'localhost', 'root', "root", "advisor-cloud" );
-    if ( $db->connect_error )
-      die( "Could not connect to db " . $db->connect_error );    
-    else
-      return $db;
-  }
+  include( 'project/libs/db.php' );
+  include( 'project/libs/model.php' );
 
-  function clean( &$db ) {
+  include( 'project/models/user.php' );
+  include( 'project/models/course.php' );
+  include( 'project/models/requirement.php' );
+  
+  define( "SAMPLE_FILE_ROOT", 'project/files/sample_' );
+
+  function clean() {
     echo "Cleaning out notes directory<br/>";
     $notes = glob( 'project/files/notes/*' ); // get all file names
     foreach( $notes as $note ){ // iterate files
@@ -26,17 +20,17 @@
 
     echo "Resetting tables in database<br/>";
 
-    $db->query( "DROP TABLE users" );
-    $db->query( "DROP TABLE courses" );
-    $db->query( "DROP TABLE user_courses" );
-    $db->query( "DROP TABLE requirements" );
-    $db->query( "DROP TABLE requirement_courses" );
-    $db->query( "DROP TABLE notes" );
-    $db->query( "DROP TABLE sessions" );
+    DB::run( "DROP TABLE IF EXISTS users" );
+    DB::run( "DROP TABLE IF EXISTS courses" );
+    DB::run( "DROP TABLE IF EXISTS user_courses" );
+    DB::run( "DROP TABLE IF EXISTS requirements" );
+    DB::run( "DROP TABLE IF EXISTS requirement_courses" );
+    DB::run( "DROP TABLE IF EXISTS notes" );
+    DB::run( "DROP TABLE IF EXISTS sessions" );
     
   }
 
-  function create_tables( &$db ) {
+  function create_tables() {
 
     $users_sql = "CREATE TABLE users(
       psid int PRIMARY KEY NOT NULL,
@@ -53,7 +47,7 @@
     $courses_sql = "CREATE TABLE courses(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       department varchar(255) NOT NULL,
-      course_number int NOT NULL,
+      course_number int NOT NULL
       )";
   
     $user_courses_sql = "CREATE TABLE user_courses(
@@ -78,45 +72,56 @@
 
     $notes_sql = "CREATE TABLE notes(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-      psid varchar NOT NULL,
-      dashed_timestamp varchar NOT NULL
+      psid varchar(255) NOT NULL,
+      dashed_timestamp varchar(255) NOT NULL
       )";
     
     $sessions_sql = "CREATE TABLE sessions(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-      psid varchar NOT NULL,
-      dashed_timestamp varchar NOT NULL
+      psid varchar(255) NOT NULL,
+      dashed_timestamp varchar(255) NOT NULL
       )";
     
-    $db->query( $users_sql );
-    $db->query( $courses_sql );
-    $db->query( $user_courses_sql );
-    $db->query( $requirements_sql );
-    $db->query( $requirement_courses_sql );
-    $db->query( $notes_sql );
-    $db->query( $sessions_sql );
+    DB::run( $users_sql );
+    DB::run( $courses_sql );
+    DB::run( $user_courses_sql );
+    DB::run( $requirements_sql );
+    DB::run( $requirement_courses_sql );
+    DB::run( $notes_sql );
+    DB::run( $sessions_sql );
     
   }
 
-  function populate_tables( &$db ) {
-
-    echo "Populating tables from files<br/>";
-
-    // sample_users
-    $users_array = file( USERS_FILE );
-    foreach( $users_array as $line ) {
-      $user = UserFactory::create_from_file( $line );
-      // DB::insert( $user ); // TODO
+  function populate_table( $table ) {
+    $file = SAMPLE_FILE_ROOT . $table . ".txt";
+    if ( !file_exists( $file )) 
+      return;
+    echo "<li>$table</li>";
+    $objects = file( $file );
+    foreach( $objects as $line ) {
+      if ( $table == 'users' )
+        $object = User::load_from_file( $line );
+      elseif ( $table == 'courses' )
+        $object = Course::load_from_file( $line );
+      elseif ( $table == 'requirements' )
+        $object = Requirement::load_from_file( $line );
+      DB::insert( $table, $object );
     }
-    // sample_courses
-
-    // sample_reqs
   }
 
-  $db = create_connection();
-  clean( $db );
-  create_tables( $db );
-  populate_tables( $db );
+  function populate_tables() {
+
+    echo "<strong>Populating tables from files</strong><br/>";
+    echo "<ul>";
+    populate_table( "users" );
+    populate_table( "courses" );
+    populate_table( "requirements" );
+    echo "</ul>";
+  }
+
+  clean();
+  create_tables();
+  populate_tables();
 
 
 ?>

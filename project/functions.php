@@ -1,5 +1,7 @@
 <?php
 
+require_once('libs/db.php');
+require_once('libs/model.php');
 require_once('models/user.php');
 require_once('models/course.php');
 require_once('models/requirement.php');
@@ -22,10 +24,10 @@ function signin( $user_id, $password ) {
 
   if ( $user ) {
     $_SESSION[ 'user' ] = $user;
-    $_SESSION[ 'viewing_psid' ] = $user->psid; // so we can use one variable for both roles. overwrite if/when advisor looks up student
+    $_SESSION[ 'viewing_psid' ] = $user->get_psid(); // so we can use one variable for both roles. overwrite if/when advisor looks up student
 
     if ( is_student() )
-      $_SESSION['user_courses'] = get_courses_for_user( $_SESSION['psid'], $_SESSION['all_courses'] );
+      $_SESSION['user_courses'] = Course::get_courses_for_user( $_SESSION['psid'], $_SESSION['all_courses'] );
   }
   // $expire = time() + 60 * 60 * 24 * 30;
   // setcookie( "user_id", $user_id, $expire ); // set cookie to what user passed in

@@ -1,15 +1,10 @@
 <?php
 
-  class Requirement extends DAO_Base {
-    public $title, $course_options, $satisfied, $is_elective;
-    public static $table = 'requirements';
+  class Requirement extends Model {
+    public $title, $category;
 
-    function __construct( $line ) {
-      $pieces = explode( ":", $line );
-      $this->satisfied = false; // default
-      $this->title = $pieces[0];
-      $this->course_options = explode( "|", $pieces[1] );
-      $this->is_elective = $this->get_is_elective();
+    function __construct() {
+      parent::__construct();
     }
 
     public function get_is_elective() {
@@ -74,9 +69,37 @@
       }
     }
 
+    public function get_values() {
+      return "$this->title, $this->category";
+    }
+
+    /*
+    *
+    * CLASS METHODS
+    *
+    */
+
+    public static function get_properties() {
+      return "$title, $category";
+    }
+
+    public static function load_record( $record ) {
+      // TODO
+    }
+
+    public static function load_from_file( $line ) {
+      $pieces = explode( ":", $line );
+      $requirement = new Requirement();
+      $requirement->title = $pieces[0];
+      $requirement->course_options = explode( "|", $pieces[1] );
+      return $requirement;
+
+      // TODO - make sure this works with db format
+    }
+
     public static function find_all() {
       // TODO
-      return parent::find_all( 'requirements' );
+      return parent::find_all( 'Requirement' );
     }
 
     public static function populate_requirements( $filename ) {

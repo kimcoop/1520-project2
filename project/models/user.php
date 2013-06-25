@@ -1,9 +1,18 @@
 <?php
 
-  class User {
-    private $access_level, $email, $first_name, $last_name, $password, $psid, $user_id;
-
+  class User extends Model {
+    private $access_level, 
+      $email, 
+      $first_name, 
+      $last_name, 
+      $password, 
+      $psid, 
+      $user_id,
+      $secret_question,
+      $secret_answer;
+/*
     function __construct( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id ) {
+      parent::__construct();
       $this->access_level = $access_level;
       $this->email = $email;
       $this->first_name = $first_name;
@@ -12,11 +21,18 @@
       $this->psid = $psid;
       $this->user_id = $user_id;
     }
+    */
+
+    function __construct() {}
 
     public function set_password( $new_password ) {
       $hashed_password = hash( 'sha256', $new_password );
       $this->password = $hashed_password;
       $this->save(); //TODO
+    }
+
+    public function get_values() {
+      return array( $this->psid, $this->access_level, $this->user_id, $this->email, $this->first_name, $this->last_name, $this->password, $this->secret_question, $this->secret_answer );
     }
 
     public function get_user_id() {
@@ -47,12 +63,59 @@
       return $this->access_level;
     }
 
+    public function set_all( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id ) {
+      $this->access_level = $access_level;
+      $this->email = $email;
+      $this->first_name = $first_name;
+      $this->last_name = $last_name;
+      $this->password = $password;
+      $this->psid = $psid;
+      $this->user_id = $user_id;
+    }
+
+    public function __toString() {
+      return "$this->psid, $this->access_level, $this->user_id, $this->email, $this->first_name, $this->last_name, $this->password, $this->secret_question, $this->secret_answer";
+    }
+
 
     /*
     *
     * CLASS METHODS
     *
     */
+
+    public static function load_record( $record ) {
+      $user = new User();
+      $user->set_all( 
+        stripslashes(rtrim( $record[ "access_level" ])),
+        stripslashes(rtrim( $record[ "email" ])),
+        stripslashes(rtrim( $record[ "first_name" ])),
+        stripslashes(rtrim( $record[ "last_name" ])),
+        stripslashes(rtrim( $record[ "password" ])),
+        stripslashes(rtrim( $record[ "psid" ])),
+        stripslashes(rtrim( $record[ "user_id" ]))
+      );
+      return $user;
+    }
+
+    public static function load_from_file( $line ) {
+      $pieces = explode( ":", $line );
+      $user = new User();
+      $user->set_all( 
+        rtrim( $pieces[6] ), // access
+        rtrim( $pieces[3] ), // email
+        rtrim( $pieces[5] ), // first_name
+        rtrim( $pieces[4] ), // last_name
+        rtrim( $pieces[1] ), // password
+        rtrim( $pieces[2] ), // psid
+        rtrim( $pieces[0] ) // user_id
+      );
+      return $user;
+    }
+
+    public static function get_properties() {
+      return "psid, access_level, user_id, email, first_name, last_name, password, secret_question, secret_answer";
+    }
 
     public static function signin( $user_id, $password ) {
       if ( self::password_is_correct( $user_id, $password ) || true ) { // TODO - correct pw

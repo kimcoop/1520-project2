@@ -1,7 +1,8 @@
 <?php 
 
-  require_once('models/dao_base.php');
+  require_once('libs/model.php');
   require_once('functions.php'); 
+  require_once('models/user.php');
   require_once('models/course.php');
   require_once('models/requirement.php');
 

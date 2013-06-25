@@ -1,8 +1,12 @@
 <?php
 
-  class Session {
+  class Session extends Model {
     // $advising_note = array( "timestamp" => $timestamp, "formatted_timestamp" => make_date( $timestamp) );
     public $psid, $timestamp;
+
+    public function __construct() {
+      parent::__construct();
+    }
 
     public function get_formatted_timestamp() {
       return make_date( $this->timestamp );
