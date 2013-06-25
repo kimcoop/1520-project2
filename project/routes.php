@@ -1,7 +1,6 @@
 <?php
   
-  require_once('functions.php');
-  session_start();
+  require_once('functions.php'); // includes session_start()
 
   if ( isset($_POST['signin_form_submit']) ) {
 
@@ -14,14 +13,17 @@
       }
 
       header( 'Location: index.php' );
+      exit();
 
-    } elseif ( signin( $_POST['user_id'], $_POST['password'] ) ) {
+    } 
 
+    $user = User::signin( $_POST['user_id'], $_POST['password'] );
+        
+    if ( is_logged_in() ) {
       if ( is_student() )
         header('Location: student.php');
       else
         header('Location: advisor.php');
-      
     } else {
       display_notice( 'Error logging in.', 'error' );
       header( 'Location: index.php' );
@@ -33,7 +35,7 @@
 
   if ( isset($_POST['log_advising_session_form_submit']) ) {
     log_advising_session( $_SESSION['viewing_psid'] );
-    header('Location: advisor.php') ;
+    header('Location: advisor.php');
     exit();
   }
 

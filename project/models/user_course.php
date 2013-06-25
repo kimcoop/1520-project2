@@ -39,9 +39,10 @@
       $course_number = (int) $pieces[1];
 
       $course = Course::where_one( "department='$department' AND course_number='$course_number'" );
+
       if ( !$course ) {
-        $course = Course::load_from_file( $line ); // load course into db before we query it
-        $course = parent::insert( 'courses', $course );
+        $course = Course::load_from_file( $line ); // load new course into db
+        $course->id = parent::insert( 'courses', $course );
       }
 
       $user_course->course_id = $course->id;

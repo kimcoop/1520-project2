@@ -39,8 +39,15 @@
       return $collection;
     }
 
+    public static function find_by_id( $table, $id ) {
+      $klass = self::class_for_table( $table );
+      $conditions = "id='$id'";
+      return DB::where( $table, $conditions, 'one', $klass );
+    }
+
     public static function find_all( $table ) {
-      $collection = DB::select_all( $table );
+      $klass = self::class_for_table( $table );
+      $collection = DB::select_all( $table, $klass );
       // TODO - parse to object format
       return $collection;
     }

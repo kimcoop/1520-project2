@@ -19,7 +19,7 @@
     public function set_password( $new_password ) {
       $hashed_password = hash( 'sha256', $new_password );
       $this->password = $hashed_password;
-      $this->save(); //TODO
+      // $this->save(); //TODO
     }
 
     public function get_values() {
@@ -34,12 +34,16 @@
       return $this->email;
     }
 
+    public function get_password() {
+      return $this->password;
+    }
+
     public function get_last_name() {
       return $this->last_name;
     }
 
     public function get_first_name() {
-      return $this->first_name();
+      return $this->first_name;
     }
 
     public function get_psid() {
@@ -97,7 +101,7 @@
         rtrim( $pieces[3] ), // email
         rtrim( $pieces[5] ), // first_name
         rtrim( $pieces[4] ), // last_name
-        rtrim( $pieces[1] ), // password
+        rtrim( hash( 'sha256', $pieces[1] ) ), // password
         rtrim( $pieces[2] ), // psid
         rtrim( $pieces[0] ) // user_id
       );
@@ -109,8 +113,21 @@
     }
 
     public static function signin( $user_id, $password ) {
-      if ( self::password_is_correct( $user_id, $password ) || true ) { // TODO - correct pw
-        $user = self::find_by_id( $user_id );
+      $hashed_password = hash( 'sha256', $password );
+      if ( self::password_is_correct( $user_id, $hashed_password ) ) {
+        $user = self::find_by_user_id( $user_id );
+        session_start();
+        $_SESSION[ 'user' ] = $user;
+        $_SESSION[ 'viewing_psid' ]= $user->get_psid();  // so we can use one variable for both roles. overwrite if/when advisor looks up student
+        
+        // if ( is_student() )
+        //   echo "is student";
+        // else
+        //   echo "is advisor";
+          // $_SESSION['user_courses'] = Course::get_courses_for_user( $_SESSION['psid'], $_SESSION['all_courses'] );
+        // $expire = time() + 60 * 60 * 24 * 30;
+        // setcookie( "user_id", $user_id, $expire ); // set cookie to what user passed in
+
         return $user;
       } else {
         return NULL;
@@ -119,38 +136,24 @@
     }
 
     public static function password_is_correct( $user_id, $password ) {
-      $hashed_password = hash( 'sha256', $password );
-      $user = self::find_by_id( $user_id );
-      return $hashed_password == $user->password;
+      $user = self::find_by_user_id( $user_id );
+      if ( !$user ) 
+        return false;
+      else
+        return $password == $user->get_password();
     }
 
-    public static function find_by_id( $user_id ) {
-      // return parent::find_by_id( $user_id, 'users' );
-      $user = new User();
-      $user->password = $password;
-      $user->user_id = $user_id;
-      $user->psid = 1234567;
-      $user->email = "kac162@pitt.edu";
-      $user->first_name = "Inigo";
-      $user->last_name = "Montoya";
-      $user->access_level = 0;
-      // TODO  - restore from db
-      return $user;
+    public static function find_by_user_id( $user_id ) {
+      return parent::where_one( 'users', "user_id='$user_id'" );
+    }
+
+    public static function find_by_psid( $psid ) {
+      return parent::where_one( 'users', "psid='$psid'" );
     }
 
     public static function find_by_full_name( $full_name ) {
-       // TODO - where does this method belong? parent class?
-      // use where()
-      $user = new User();
-      $user->password = $password;
-      $user->user_id = $user_id;
-      $user->psid = 1234567;
-      $user->email = "kac162@pitt.edu";
-      $user->first_name = "Inigo";
-      $user->last_name = "Montoya";
-      $user->access_level = 0;
-      // TODO  - restore from db
-      return $user; 
+      // TODO - split bakc to first and last
+     return parent::where_one( 'users', "first_name='$first_name' AND last_name='$last_name'" );
     }
 
 

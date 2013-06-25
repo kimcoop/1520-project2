@@ -1,14 +1,16 @@
 <?php
 
-require_once('libs/db.php');
-require_once('libs/model.php');
-require_once('libs/storable_interface.php');
+session_start();
 
-require_once('models/user.php');
-require_once('models/course.php');
-require_once('models/requirement.php');
-require_once('models/requirement_course.php');
-require_once('models/user_course.php');
+function __autoload($class) {
+  $file = 'models/' . $class . '.php';
+  if ( file_exists( $file ))
+    include $file;
+  elseif ( file_exists( 'libs/'. $class . '.php' ))
+    include 'libs/'. $class . '.php';
+  else
+    include 'libs/storable_interface.php';
+}
 
 date_default_timezone_set( 'America/New_York' );
 
@@ -23,22 +25,6 @@ define( "NOTES_FILE", 'files/notes.txt' );
 define( "MAILER_SUBJECT", "Your AdvisorCloud Credentials" );
 define( "MAILER_SENDER", "kac162@pitt.edu" );
 
-function signin( $user_id, $password ) {
-  $user = User::signin( $user_id, $password );
-
-  if ( $user ) {
-    $_SESSION[ 'user' ] = $user;
-    $_SESSION[ 'viewing_psid' ] = $user->get_psid(); // so we can use one variable for both roles. overwrite if/when advisor looks up student
-
-    if ( is_student() )
-      $_SESSION['user_courses'] = Course::get_courses_for_user( $_SESSION['psid'], $_SESSION['all_courses'] );
-  }
-  // $expire = time() + 60 * 60 * 24 * 30;
-  // setcookie( "user_id", $user_id, $expire ); // set cookie to what user passed in
-
-  return $user;
-}
-
 function clear_search() {
   $name = $_SESSION['student']['full_name'];
   unset( $_SESSION['student'] );
@@ -46,16 +32,21 @@ function clear_search() {
   unset( $_SESSION['should_show_notes'] );
 }
 
+function current_user() {
+  $user = $_SESSION['user'];
+  return $user;
+}
+
 function is_logged_in() {
   return isset( $_SESSION['user'] );
 }
 
 function is_student() {
-  return $_SESSION['user']->get_access_level() == STUDENT_ACCESS_LEVEL;
+  return current_user()->get_access_level() == STUDENT_ACCESS_LEVEL;
 }
 
 function is_advisor() {
-  return $_SESSION['user']->get_access_level() == ADVISOR_ACCESS_LEVEL;
+  return current_user()->get_access_level() == ADVISOR_ACCESS_LEVEL;
 }
 
 function is_viewing_student() {
@@ -112,7 +103,7 @@ function get_root_url() {
 function get_requirements() {
   // populate a list of graduation requirements for the given $psid
   // return Requirements::populate_requirements( REQS_FILE );
-  return Requirement::find_all();
+  return Requirement::find_all( 'requirements' );
 }
 
 

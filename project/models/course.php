@@ -74,7 +74,7 @@
 
     public static function get_courses_for_user( $psid ) {
       // collect which courses map to the passed-in psid
-      $courses = parent::find_all();
+      $courses = parent::find_all( 'courses' );
 
       $user_courses = array();
 
@@ -88,7 +88,7 @@
     }
 
     public static function get_courses_by( $grouping, $psid ) {
-      $all_courses = parent::find_all();
+      $all_courses = parent::find_all( 'courses' );
       $courses = array();
       foreach( $all_courses as $course ) {
         if ( $course->psid == $psid ) {

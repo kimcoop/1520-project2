@@ -26,7 +26,7 @@
         ?>
 
         <h2>
-          <?php echo $_SESSION['first_name']; ?>'s 
+          <?php echo $_SESSION['user']->get_first_name(); ?>'s 
           <span class="light">Advisor Dashboard</span>
         </h2>
 

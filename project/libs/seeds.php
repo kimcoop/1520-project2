@@ -124,7 +124,7 @@
     populate_table( "User", "users" );
     populate_table( "Course", "courses" );
     populate_table( "Requirement", "requirements" );
-    // populate_table( "UserCourse", "courses", "user_courses" );
+    populate_table( "UserCourse", "courses", "user_courses" );
     populate_table( "RequirementCourse", "requirements", "requirement_courses", NO_INSERTION );
     /*
     DB::run( $user_courses_sql );

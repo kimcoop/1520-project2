@@ -9,7 +9,7 @@
   <div class="hgroup">
     
     <h2>
-      <?php echo $_SESSION['first_name'] ?>'s 
+      <?php echo current_user()->get_first_name(); ?>'s
       <span class="light">Student Dashboard</span>
     </h2>
 

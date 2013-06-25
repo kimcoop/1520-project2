@@ -1,10 +1,6 @@
 <?php 
 
-  require_once('libs/model.php');
-  require_once('functions.php'); 
-  require_once('models/user.php');
-  require_once('models/course.php');
-  require_once('models/requirement.php');
+  require_once('functions.php');
 
 ?>
 
@@ -34,7 +30,7 @@
         <div class="container nav-container">
           <ul class="nav nav-pills pull-right">
             <li><a href="<?php echo get_root_url(); ?>">
-              Welcome, <?php echo $_SESSION['full_name']; ?>
+              Welcome, <?php echo current_user()->get_first_name(); ?>
             </a></li>
             <li>
               <a href="routes.php?action=logout">

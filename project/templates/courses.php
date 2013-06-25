@@ -4,7 +4,7 @@
     <table class="table table-hover">
       <?php
 
-        $courses_per_term = get_courses_by( 'term', $_SESSION['viewing_psid'] );
+        $courses_per_term = Course::get_courses_by( 'term', $_SESSION['viewing_psid'] );
 
         if ( !empty($courses_per_term) ) {
 
@@ -48,7 +48,7 @@
      <table class="table table-hover">
       <?php
 
-        $courses_by_department = get_courses_by( 'department', $_SESSION['viewing_psid'] );
+        $courses_by_department = Course::get_courses_by( 'department', $_SESSION['viewing_psid'] );
 
         if ( !empty($courses_by_department) ) {
 
