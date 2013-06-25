@@ -66,16 +66,25 @@ public static function load_from_file( $line ) {
       foreach( $course_options as $course_option ) {
         $req_course = new RequirementCourse();
         $req_course->requirement_id = $req_id;
+
         $course_pieces = explode( ",", $course_option );
         $course_department = $course_pieces[ 0 ];
         $course_number = (int) $course_pieces[ 1 ];
+
         $course = Course::where_one( "department='$course_department' AND course_number='$course_number'" );
-        echo $course;
+
+        if ( !$course ) {
+          // a course option that satisfies this requirement is not yet in the db. insert it
+          $course = new Course();
+          $course->department = $course_department;
+          $course->course_number = $course_number;
+          $course->id = parent::insert( 'courses', $course ); // returns ID
+        }
+
         $req_course->course_id = $course->id;
+        parent::insert( 'requirement_courses', $req_course );
       }
-
-
-      return $req_course;
+      
     }
 
   }

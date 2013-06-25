@@ -6,6 +6,10 @@
       // $this->db = DB::instance();
     }
 
+    public static function insert( $table, $entity ) {
+      return DB::insert( $table, $entity );
+    }
+
     public static function class_for_table( $table ) {
       // this could be optimized. hard-coding strings is a ghetto hack ><
       switch ( $table ) {
@@ -26,8 +30,7 @@
 
     public static function where_one( $table, $conditions ) {
       $klass = self::class_for_table( $table );
-      $collection =  DB::where( $table, $conditions, 'one', $klass );
-      return $collection;
+      return DB::where( $table, $conditions, 'one', $klass );
     }
 
     public static function where_many( $table, $conditions ) {

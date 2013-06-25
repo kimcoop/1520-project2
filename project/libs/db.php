@@ -44,7 +44,11 @@
       }
 
       $sql = "INSERT IGNORE INTO $table( $keys ) VALUES( $values )";
-      return self::run( $sql );
+      $result = self::run( $sql );
+      if ( $result ) 
+        return $mysqli->insert_id; // return ID of this (last) insertion
+      else 
+        return NULL;
     }
 
     public function select_all( $table ) {
@@ -56,20 +60,25 @@
 
       $sql = "SELECT * FROM $table WHERE $conditions";
       $result = self::run( $sql );
+      $return_object = NULL;
+
+      if ( $result->num_rows == 0 )
+        return NULL;
 
       if ( $one_or_many == 'one' ) {
-        $object = $klass::load_record( $result->fetch_assoc() );
-        $result->free();
-        return $object;
+        $return_object = $klass::load_record( $result->fetch_assoc() );
       } else {
         $collection = array();
         while ( $row = $result->fetch_assoc() ) {
           $object = $klass::load_record( $row );
           $collection[] = $object;
         }
-        $result->free();
-        return $collection;
+        $return_object = $collection;
       }
+
+      $result->free();
+      return $return_object;
+
     }
 
     /*

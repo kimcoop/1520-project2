@@ -12,6 +12,7 @@
   include( 'project/models/user_course.php' );
   
   define( "SAMPLE_FILE_ROOT", 'project/files/sample_' );
+  define( "NO_INSERTION", FALSE );
 
   function clean() {
     echo "Cleaning out notes directory...<br/>";
@@ -101,7 +102,7 @@
     
   }
 
-  function populate_table( $klass, $filename, $table=NULL ) {
+  function populate_table( $klass, $filename, $table=NULL, $do_insertion=TRUE ) {
     if ( $table == NULL ) 
       $table = $filename;
     $file = SAMPLE_FILE_ROOT . $filename . ".txt";
@@ -111,7 +112,8 @@
     $objects = file( $file );
     foreach( $objects as $line ) {
       $object = $klass::load_from_file( $line );
-      DB::insert( $table, $object );
+      if ( $do_insertion )
+        DB::insert( $table, $object );
     }
   }
 
@@ -122,8 +124,8 @@
     populate_table( "User", "users" );
     populate_table( "Course", "courses" );
     populate_table( "Requirement", "requirements" );
-    populate_table( "UserCourse", "courses", "user_courses" );
-    populate_table( "RequirementCourse", "requirements", "requirement_courses" );
+    // populate_table( "UserCourse", "courses", "user_courses" );
+    populate_table( "RequirementCourse", "requirements", "requirement_courses", NO_INSERTION );
     /*
     DB::run( $user_courses_sql );
     DB::run( $requirement_courses_sql );

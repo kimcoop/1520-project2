@@ -41,10 +41,9 @@
       $course = Course::where_one( "department='$department' AND course_number='$course_number'" );
       if ( !$course ) {
         $course = Course::load_from_file( $line ); // load course into db before we query it
-        $course = DB::insert( 'courses', $course );
+        $course = parent::insert( 'courses', $course );
       }
-      
-      echo $course . "<br>";
+
       $user_course->course_id = $course->id;
   
       $user_course->term = $pieces[2];

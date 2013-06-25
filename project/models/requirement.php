@@ -11,6 +11,12 @@
       $this->category == 'elective';
     }
 
+    public function set_all( $id, $title, $category ) {
+      $this->id = $id;
+      $this->title = $title;
+      $this->category = $category;
+    }
+
     public function get_elective_number() {
       if ( $this->is_elective ) {
         $chars = strlen( $this->title );
@@ -71,6 +77,10 @@
       return array( $this->title, $this->category );
     }
 
+    public function __toString() {
+      return "$this->title";
+    }
+
     /*
     *
     * CLASS METHODS
@@ -81,12 +91,19 @@
       return "title, category";
     }
 
+    public static function where_one( $conditions ) {
+      return parent::where_one( 'requirements', $conditions );
+    }
+
     public static function find_by_title( $title ) {
-      return parent::where_one( 'requirements', "title='$title'", 'requirements' );
+      $requirement = self::where_one( "title='$title'" );
+      return $requirement;
     }
 
     public static function load_record( $record ) {
-      // TODO
+      $requirement = new Requirement();
+      $requirement->set_all( $record['id'], $record['title'], $record['category'] );
+      return $requirement;
     }
 
     public static function load_from_file( $line ) {

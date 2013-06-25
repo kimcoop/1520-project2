@@ -3,7 +3,6 @@
   class Course extends Model implements Storable {
 
     public $id, $department, $course_number;
-    public  $term='TODO', $psid='TODO', $grade='TODO';
 
     function __construct() {
       parent::__construct();
@@ -33,7 +32,7 @@
     }
 
     public function __toString() {
-      return "$this->id, $this->department $this->course_number";
+      return "$this->department $this->course_number";
     }
 
     public function set_all( $id, $department, $course_number ) {
