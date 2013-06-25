@@ -1,6 +1,6 @@
 <?php
 
-  class Session extends Model {
+  class Session extends Model implements Storable {
     // $advising_note = array( "timestamp" => $timestamp, "formatted_timestamp" => make_date( $timestamp) );
     public $psid, $timestamp;
 

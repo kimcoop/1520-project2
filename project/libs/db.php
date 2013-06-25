@@ -31,7 +31,6 @@
     }
 
     public function insert( $table, $entity ) {
-      echo "$entity<br/>"; // TODO - remove
       $klass = get_class( $entity );
       $keys = $klass::get_properties();
       $values_array = $entity->get_values();
@@ -42,7 +41,7 @@
           $values .= ", ";
       }
 
-      $sql = "INSERT INTO $table( $keys ) VALUES( $values )";
+      $sql = "INSERT IGNORE INTO $table( $keys ) VALUES( $values )";
       self::run( $sql );
     }
 

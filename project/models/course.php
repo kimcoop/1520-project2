@@ -1,6 +1,7 @@
 <?php
 
-  class Course extends Model {
+  class Course extends Model implements Storable {
+
     public $department, $course_number;
     public  $term='TODO', $psid='TODO', $grade='TODO';
 
@@ -27,19 +28,17 @@
       return in_array( $this->grade, $passing_grades ); 
     }
 
-    public function print_course() {
-      echo "<strong>$this->department $this->course_number</strong> 
-            $this->term
-            $this->psid
-            $this->grade";
-    }
-
     public function get_values() {
       return array( $this->department, $this->course_number);
     }
 
     public function __toString() {
       return "$this->department, $this->course_number";
+    }
+
+    public function set_all( $department, $course_number ) {
+      $this->department = $department;
+      $this->course_number = $course_number;
     }
 
     /*
@@ -53,24 +52,14 @@
     }
 
     public static function load_record( $record ) {
-      return new Course( 
-        $record[ "department" ], 
-        $record[ "course_number" ], 
-        $record[ "term" ], 
-        $record[ "psid" ], 
-        $record[ "grade" ]
-      );
+      $course = new Course();
+      $course->set_all( $record[ "department" ], $record[ "course_number" ] );
     }
 
     public static function load_from_file( $line ) {
       $pieces = explode( ":", $line );
       $course = new Course();
-      // TODO- nicer setters/getters
-      $course->department = $pieces[0];
-      $course->course_number = $pieces[1];
-      $course->term = $pieces[2];
-      $course->psid = $pieces[3];
-      $course->grade = preg_replace( '/[^(\x20-\x7F)]*/','', $pieces[4] );
+      $course->set_all( $pieces[0], $pieces[1] );
       return $course;
     }
 

@@ -1,16 +1,14 @@
 <?php
 
-  class Requirement extends Model {
+  class Requirement extends Model implements Storable {
     public $title, $category;
 
     function __construct() {
       parent::__construct();
     }
 
-    public function get_is_elective() {
-      $pattern = '/Elec/';
-      preg_match( $pattern, $this->title, $matches );
-      return count( $matches ) > 0;
+    public function is_elective() {
+      $this->category == 'elective';
     }
 
     public function get_elective_number() {
@@ -70,7 +68,7 @@
     }
 
     public function get_values() {
-      return "$this->title, $this->category";
+      return array( $this->title, $this->category );
     }
 
     /*
@@ -80,7 +78,7 @@
     */
 
     public static function get_properties() {
-      return "$title, $category";
+      return "title, category";
     }
 
     public static function load_record( $record ) {
@@ -91,7 +89,16 @@
       $pieces = explode( ":", $line );
       $requirement = new Requirement();
       $requirement->title = $pieces[0];
-      $requirement->course_options = explode( "|", $pieces[1] );
+
+      // determine category
+      $pattern = '/Elec/';
+      if ( preg_match( $pattern, $requirement->title ) )
+        $requirement->category = 'elective';
+      else
+        $requirement->category = 'core';
+
+
+      // $requirement->course_options = explode( "|", $pieces[1] );
       return $requirement;
 
       // TODO - make sure this works with db format
@@ -103,18 +110,8 @@
     }
 
     public static function populate_requirements( $filename ) {
-      // read in and parse the REQS_FILE to collect the list
-      $reqs = array();
-      $file_handle = fopen( $filename, "r" );
-      
-      while ( !feof($file_handle) ) {
-        $line = fgets( $file_handle );
-        $req = new Requirement( $line );
-        $reqs[] = $req;
-      }
-
-      fclose( $file_handle );
-      return $reqs;
+      // TODO - remove (I think)
+      self::find_all();
     }
 
   }

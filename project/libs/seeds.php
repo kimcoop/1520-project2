@@ -2,6 +2,7 @@
 
 
   include( 'project/libs/db.php' );
+  include( 'project/libs/storable_interface.php' );
   include( 'project/libs/model.php' );
 
   include( 'project/models/user.php' );
@@ -11,14 +12,14 @@
   define( "SAMPLE_FILE_ROOT", 'project/files/sample_' );
 
   function clean() {
-    echo "Cleaning out notes directory<br/>";
+    echo "Cleaning out notes directory...<br/>";
     $notes = glob( 'project/files/notes/*' ); // get all file names
     foreach( $notes as $note ){ // iterate files
       if ( is_file( $note ) )
         unlink( $note ); // delete file
     }
 
-    echo "Resetting tables in database<br/>";
+    echo "Resetting tables in database...<br/>";
 
     DB::run( "DROP TABLE IF EXISTS users" );
     DB::run( "DROP TABLE IF EXISTS courses" );
@@ -47,7 +48,8 @@
     $courses_sql = "CREATE TABLE courses(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       department varchar(255) NOT NULL,
-      course_number int NOT NULL
+      course_number int NOT NULL,
+      UNIQUE INDEX department_course_number( department, course_number )
       )";
   
     $user_courses_sql = "CREATE TABLE user_courses(
@@ -55,31 +57,36 @@
       course_id int NOT NULL,
       psid int NOT NULL,
       term varchar(255) NOT NULL,
-      grade varchar(5) NOT NULL
+      grade varchar(5) NOT NULL,
+      UNIQUE INDEX course_psid_term( course_id, psid, term )
       )";
 
     $requirements_sql = "CREATE TABLE requirements(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       title varchar(255) NOT NULL,
-      category varchar(255)
+      category varchar(255),
+      UNIQUE INDEX uniq_title( title )
       )";
     
     $requirement_courses_sql = "CREATE TABLE requirement_courses(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       requirement_id int NOT NULL,
-      course_id int NOT NULL
+      course_id int NOT NULL,
+      UNIQUE INDEX requirement_course( requirement_id, course_id )
       )";
 
     $notes_sql = "CREATE TABLE notes(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       psid varchar(255) NOT NULL,
-      dashed_timestamp varchar(255) NOT NULL
+      dashed_timestamp varchar(255) NOT NULL,
+      UNIQUE INDEX psid_timestamp( psid, dashed_timestamp )
       )";
     
     $sessions_sql = "CREATE TABLE sessions(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       psid varchar(255) NOT NULL,
-      dashed_timestamp varchar(255) NOT NULL
+      dashed_timestamp varchar(255) NOT NULL,
+      UNIQUE INDEX psid_timestamp( psid, dashed_timestamp )
       )";
     
     DB::run( $users_sql );
@@ -116,6 +123,12 @@
     populate_table( "users" );
     populate_table( "courses" );
     populate_table( "requirements" );
+    /*
+    DB::run( $user_courses_sql );
+    DB::run( $requirements_sql );
+    DB::run( $requirement_courses_sql );
+    DB::run( $notes_sql );
+    DB::run( $sessions_sql );*/
     echo "</ul>";
   }
 
