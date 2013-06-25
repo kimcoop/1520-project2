@@ -11,20 +11,10 @@
       $user_id,
       $secret_question,
       $secret_answer;
-/*
-    function __construct( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id ) {
-      parent::__construct();
-      $this->access_level = $access_level;
-      $this->email = $email;
-      $this->first_name = $first_name;
-      $this->last_name = $last_name;
-      $this->password = $password;
-      $this->psid = $psid;
-      $this->user_id = $user_id;
-    }
-    */
 
-    function __construct() {}
+    function __construct() {
+      parent::__construct();
+    }
 
     public function set_password( $new_password ) {
       $hashed_password = hash( 'sha256', $new_password );
@@ -135,7 +125,7 @@
     }
 
     public static function find_by_id( $user_id ) {
-      // TODO - where does this method belong? parent class?
+      // return parent::find_by_id( $user_id, 'users' );
       $user = new User();
       $user->password = $password;
       $user->user_id = $user_id;
@@ -148,12 +138,9 @@
       return $user;
     }
 
-    public static function find_by( $field, $value ) {
-      // parent::query_single( $this->table, $field, $value );
-    }
-
     public static function find_by_full_name( $full_name ) {
        // TODO - where does this method belong? parent class?
+      // use where()
       $user = new User();
       $user->password = $password;
       $user->user_id = $user_id;

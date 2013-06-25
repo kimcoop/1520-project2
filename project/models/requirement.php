@@ -81,6 +81,10 @@
       return "title, category";
     }
 
+    public static function find_by_title( $title ) {
+      return parent::where_one( 'requirements', "title='$title'", 'requirements' );
+    }
+
     public static function load_record( $record ) {
       // TODO
     }
@@ -97,17 +101,9 @@
       else
         $requirement->category = 'core';
 
-
-      // $requirement->course_options = explode( "|", $pieces[1] );
       return $requirement;
-
-      // TODO - make sure this works with db format
     }
 
-    public static function find_all() {
-      // TODO
-      return parent::find_all( 'Requirement' );
-    }
 
     public static function populate_requirements( $filename ) {
       // TODO - remove (I think)

@@ -2,9 +2,13 @@
 
 require_once('libs/db.php');
 require_once('libs/model.php');
+require_once('libs/storable_interface.php');
+
 require_once('models/user.php');
 require_once('models/course.php');
 require_once('models/requirement.php');
+require_once('models/requirement_course.php');
+require_once('models/user_course.php');
 
 date_default_timezone_set( 'America/New_York' );
 

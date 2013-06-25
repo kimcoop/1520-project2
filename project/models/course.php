@@ -2,7 +2,7 @@
 
   class Course extends Model implements Storable {
 
-    public $department, $course_number;
+    public $id, $department, $course_number;
     public  $term='TODO', $psid='TODO', $grade='TODO';
 
     function __construct() {
@@ -33,10 +33,11 @@
     }
 
     public function __toString() {
-      return "$this->department, $this->course_number";
+      return "$this->id, $this->department $this->course_number";
     }
 
-    public function set_all( $department, $course_number ) {
+    public function set_all( $id, $department, $course_number ) {
+      $this->id = $id;
       $this->department = $department;
       $this->course_number = $course_number;
     }
@@ -47,25 +48,34 @@
     *
     */
 
+    public static function where_one( $conditions ) {
+      return parent::where_one( 'courses', $conditions );
+    }
+
+    public static function where_many( $conditions ) {
+     return parent::where_many( 'courses', $conditions ); 
+    }
+
     public static function get_properties() {
       return "department, course_number";
     }
 
     public static function load_record( $record ) {
       $course = new Course();
-      $course->set_all( $record[ "department" ], $record[ "course_number" ] );
+      $course->set_all( $record['id'], $record[ "department" ], $record[ "course_number" ] );
+      return $course;
     }
 
     public static function load_from_file( $line ) {
       $pieces = explode( ":", $line );
       $course = new Course();
-      $course->set_all( $pieces[0], $pieces[1] );
+      $course->set_all( -1, $pieces[0], $pieces[1] ); // new entities have no ID
       return $course;
     }
 
     public static function get_courses_for_user( $psid ) {
       // collect which courses map to the passed-in psid
-      $courses = parent::find_all( 'Course' );
+      $courses = parent::find_all();
 
       $user_courses = array();
 
@@ -79,7 +89,7 @@
     }
 
     public static function get_courses_by( $grouping, $psid ) {
-      $all_courses = parent::find_all( 'Course' );
+      $all_courses = parent::find_all();
       $courses = array();
       foreach( $all_courses as $course ) {
         if ( $course->psid == $psid ) {

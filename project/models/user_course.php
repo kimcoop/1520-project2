@@ -1,34 +1,57 @@
 <?php
 
   class UserCourse extends Model implements Storable {
+
+    public $id, $course_id, $psid, $term, $grade;
+
+    public function set_all( $id, $course_id, $psid, $term, $grade ) {
+      $this->id = $id;
+      $this->course_id = $course_id;
+      $this->psid = $psid;
+      $this->term = $term;
+      $this->grade = $grade;
+    }
+
+    public function get_values() {
+      return array( $this->id, $this->course_id, $this->psid, $this->term, $this->grade );
+    }
+
     /*
     *
     * CLASS METHODS
     *
     */
 
+    public static function get_properties() {
+      return "id, course_id, psid, term, grade";
+    }
 
     public static function load_record( $record ) {
-      $course = new Course();
-      
-        $record[ "department" ], 
-        $record[ "course_number" ], 
-        $record[ "term" ], 
-        $record[ "psid" ], 
-        $record[ "grade" ]
-      );
+      $user_course = new UserCourse();
+      $user_course->set_all( $record['id'], $record['course_id'], $record['psid'], $record['term'], $record['grade'] );
     }
 
     public static function load_from_file( $line ) {
       $pieces = explode( ":", $line );
-      $course = new Course();
-      // TODO- nicer setters/getters
-      $course->department = $pieces[0];
-      $course->course_number = $pieces[1];
-      $course->term = $pieces[2];
-      $course->psid = $pieces[3];
-      $course->grade = preg_replace( '/[^(\x20-\x7F)]*/','', $pieces[4] );
-      return $course;
+      $user_course = new UserCourse();
+
+      $department = $pieces[0];
+      $course_number = (int) $pieces[1];
+
+      $course = Course::where_one( "department='$department' AND course_number='$course_number'" );
+      if ( !$course ) {
+        $course = Course::load_from_file( $line ); // load course into db before we query it
+        $course = DB::insert( 'courses', $course );
+      }
+      
+      echo $course . "<br>";
+      $user_course->course_id = $course->id;
+  
+      $user_course->term = $pieces[2];
+      $user_course->psid = $pieces[3];
+      $user_course->grade = trim( $pieces[4] );
+
+      return $user_course;
     }
 
   }

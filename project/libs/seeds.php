@@ -8,6 +8,8 @@
   include( 'project/models/user.php' );
   include( 'project/models/course.php' );
   include( 'project/models/requirement.php' );
+  include( 'project/models/requirement_course.php' );
+  include( 'project/models/user_course.php' );
   
   define( "SAMPLE_FILE_ROOT", 'project/files/sample_' );
 
@@ -99,38 +101,42 @@
     
   }
 
-  function populate_table( $table ) {
-    $file = SAMPLE_FILE_ROOT . $table . ".txt";
+  function populate_table( $klass, $filename, $table=NULL ) {
+    if ( $table == NULL ) 
+      $table = $filename;
+    $file = SAMPLE_FILE_ROOT . $filename . ".txt";
     if ( !file_exists( $file )) 
       return;
-    echo "<li>$table</li>";
+    echo "<li>$table ($filename.txt) </li>";
     $objects = file( $file );
     foreach( $objects as $line ) {
-      if ( $table == 'users' )
-        $object = User::load_from_file( $line );
-      elseif ( $table == 'courses' )
-        $object = Course::load_from_file( $line );
-      elseif ( $table == 'requirements' )
-        $object = Requirement::load_from_file( $line );
+      $object = $klass::load_from_file( $line );
       DB::insert( $table, $object );
     }
   }
 
   function populate_tables() {
 
-    echo "<strong>Populating tables from files</strong><br/>";
+    echo "<strong>Populating tables from files...</strong><br/>";
     echo "<ul>";
-    populate_table( "users" );
-    populate_table( "courses" );
-    populate_table( "requirements" );
+    populate_table( "User", "users" );
+    populate_table( "Course", "courses" );
+    populate_table( "Requirement", "requirements" );
+    populate_table( "UserCourse", "courses", "user_courses" );
+    populate_table( "RequirementCourse", "requirements", "requirement_courses" );
     /*
     DB::run( $user_courses_sql );
-    DB::run( $requirements_sql );
     DB::run( $requirement_courses_sql );
-    DB::run( $notes_sql );
-    DB::run( $sessions_sql );*/
+    */
     echo "</ul>";
   }
+
+
+  /*
+  *
+  * MAIN
+  *
+  */
 
   clean();
   create_tables();

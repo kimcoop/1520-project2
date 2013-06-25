@@ -28,6 +28,8 @@
       $result = self::instance()->query( $sql );
       if ( !$result ) 
         die( "<br><br><strong class='text-error'>Invalid SQL</strong><br> " . self::instance()->error . "<br><br>( $sql )");
+      else
+        return $result;
     }
 
     public function insert( $table, $entity ) {
@@ -42,13 +44,34 @@
       }
 
       $sql = "INSERT IGNORE INTO $table( $keys ) VALUES( $values )";
-      self::run( $sql );
+      return self::run( $sql );
     }
 
     public function select_all( $table ) {
       $sql = "SELECT * FROM $table";
       return self::run( $sql );
     }
+
+    public function where( $table, $conditions, $one_or_many, $klass ) {
+
+      $sql = "SELECT * FROM $table WHERE $conditions";
+      $result = self::run( $sql );
+
+      if ( $one_or_many == 'one' ) {
+        $object = $klass::load_record( $result->fetch_assoc() );
+        $result->free();
+        return $object;
+      } else {
+        $collection = array();
+        while ( $row = $result->fetch_assoc() ) {
+          $object = $klass::load_record( $row );
+          $collection[] = $object;
+        }
+        $result->free();
+        return $collection;
+      }
+    }
+
     /*
 
     public function update( $table, $update_data, $identifier ) {
