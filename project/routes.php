@@ -59,9 +59,9 @@
 
   } elseif ( isset($_GET['student_search_term']) ) {
 
-    if ( $user = find_user_by_psid_or_name( $_GET['student_search_term'] )) {
+    if ( $user = User::find_user_by_psid_or_name( $_GET['student_search_term'] )) {
       set_viewing_student( $user );
-      display_notice( "Viewing report for $user->get_full_name().", 'success' );
+      display_notice( "Viewing report for " . $user->get_full_name(), 'success' );
       header( "Location: advisor.php?student_id=$user->get_user_id()" );
       exit();
     } else {

@@ -3,7 +3,7 @@
     if ( is_viewing_student() ) {
 
       $format = "%s, user ID %u, PeopleSoft #%u";
-      $student_summary = sprintf( $format, $_SESSION['student']['full_name'], $_SESSION['student']['user_id'], $_SESSION['student']['psid'] );
+      $student_summary = sprintf( $format, $_SESSION['student']->get_full_name(), $_SESSION['student']->get_user_id(), $_SESSION['student']->get_psid() );
 
   ?>
   <aside class="well">

@@ -54,7 +54,7 @@ function is_viewing_student() {
 }
 
 function is_logging_session() {
- return isset( $_SESSION['student']['logging_session'] ); 
+ return isset( $_SESSION['logging_session'] ); 
 }
 
 function should_show_notice() {
@@ -156,28 +156,20 @@ function requirements_met( $psid, $requirement ) {
   *
   */
 
-  function find_user_by_psid_or_name( $search_term ) {
-    if ( $search_term ) {
-      $user = User::find_by( 'id', $search_term );
-      if ( !$user ) 
-        $user = User::find_by( 'full_name', $search_term ); // this is wrong (TODO - going to have to get clever here)
-      return isset( $user );
-    }
-    return false;
-  }
 
   function set_viewing_student( $student_user ) {
-
+    $_SESSION['student'] = $student_user;
+    $_SESSION['viewing_psid'] = $student_user->get_psid();
   }
 
   function log_advising_session( $psid ) {
-
+    // TODO - insert into db
     $session_timestamp = get_formatted_timestamp();
     $log_timestamp = sprintf( "%d:%s", $psid, $session_timestamp );
 
     if ( file_put_contents( SESSIONS_FILE, "\n" . $log_timestamp, FILE_APPEND | LOCK_EX ) ) {
-      $_SESSION['student']['logging_session'] = true;
-      $_SESSION['student']['logging_session_timestamp'] = $log_timestamp;
+      $_SESSION['logging_session'] = true;
+      $_SESSION['logging_session_timestamp'] = $log_timestamp;
       display_notice( 'Advising session logged.', 'success' );
     } else {
       display_notice( 'Error logging advising session.', 'error' );

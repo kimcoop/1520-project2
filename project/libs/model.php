@@ -30,7 +30,8 @@
 
     public static function where_one( $table, $conditions ) {
       $klass = self::class_for_table( $table );
-      return DB::where( $table, $conditions, 'one', $klass );
+      $result = DB::where( $table, $conditions, 'one', $klass );
+      return $result;
     }
 
     public static function where_many( $table, $conditions ) {

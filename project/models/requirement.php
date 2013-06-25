@@ -121,10 +121,8 @@
       return $requirement;
     }
 
-
-    public static function populate_requirements( $filename ) {
-      // TODO - remove (I think)
-      self::find_all();
+    public static function find_all() {
+      return parent::find_all( 'requirements' );
     }
 
   }

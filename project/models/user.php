@@ -152,8 +152,18 @@
     }
 
     public static function find_by_full_name( $full_name ) {
-      // TODO - split bakc to first and last
-     return parent::where_one( 'users', "first_name='$first_name' AND last_name='$last_name'" );
+      $names = explode( " ", $full_name );
+      $first_name = $names[0];
+      $last_name = $names[1];
+      $user = parent::where_one( 'users', "first_name='$first_name' AND last_name='$last_name'" );
+      return $user;
+    }
+
+    public static function find_user_by_psid_or_name( $search_term ) {
+      $user = User::find_by_psid( $search_term );
+      if ( !$user )
+        $user = User::find_by_full_name( $search_term );
+      return $user;
     }
 
 

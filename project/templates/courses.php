@@ -91,55 +91,56 @@
 
     <?php
 
-        $reqs = get_requirements();
+        $reqs = Requirement::find_all();
 
-          ksort( $reqs );
-          foreach( $reqs as $req ) {
-          ?>
-            <tr>  
-              <td>
-                <?php echo $req->title; ?>
-              </td>
+        ksort( $reqs );
+        foreach( $reqs as $req ) {
+        ?>
+          <tr>  
+            <td>
+              <?php echo $req->title; ?>
+            </td>
 
-              <td>
-                <?php
-                
-                  if ( $req->is_satisfied( $_SESSION['viewing_psid'], $req ) ) {
-
-                ?>
-
-                  <span class='text-success'>S</span>
-
-                <?php
-
-                  } else { 
-
-                ?>
-                  <span class='text-error'>N</span>
-              
-                <?php } ?>
-              </td>
-              <td>
-            
+            <td>
               <?php
+              
                 if ( $req->is_satisfied( $_SESSION['viewing_psid'], $req ) ) {
-                  $req->print_satisfying_course( $_SESSION['viewing_psid'], $_SESSION['user_courses'] );
-                } else {
-                  echo "<span class='muted'>Courses that satisfy this requirement: ";
-                  $req->print_requirements();
-                  echo "</span>";
-                }
+
               ?>
 
-              </td>
-            </tr>
+                <span class='text-success'>S</span>
 
+              <?php
+
+                } else { 
+
+              ?>
+                <span class='text-error'>N</span>
             
+              <?php } ?>
+            </td>
+            <td>
+          
             <?php
-            
-            } // foreach $reqs
+            /*
+              if ( $req->is_satisfied( $_SESSION['viewing_psid'], $req ) ) {
+                $req->print_satisfying_course( $_SESSION['viewing_psid'], $_SESSION['user_courses'] );
+              } else {
+                echo "<span class='muted'>Courses that satisfy this requirement: ";
+                $req->print_requirements();
+                echo "</span>";
+              }*/
+            ?>
 
-          ?>
+            </td>
+          </tr>
+
+          
+          <?php
+          
+          } // foreach $reqs
+
+        ?>
     </table>
     
   </div>

@@ -51,9 +51,17 @@
         return NULL;
     }
 
-    public function select_all( $table ) {
+    public function select_all( $table, $klass ) {
       $sql = "SELECT * FROM $table";
-      return self::run( $sql );
+      $result = self::run( $sql );
+
+      if ( $result->num_rows == 0 )
+        return NULL;
+
+      $return_object = self::parse_array_to_objects( $result, $klass );
+      $result->free();
+      return $return_object;
+
     }
 
     public function where( $table, $conditions, $one_or_many, $klass ) {
@@ -68,17 +76,21 @@
       if ( $one_or_many == 'one' ) {
         $return_object = $klass::load_record( $result->fetch_assoc() );
       } else {
-        $collection = array();
-        while ( $row = $result->fetch_assoc() ) {
-          $object = $klass::load_record( $row );
-          $collection[] = $object;
-        }
-        $return_object = $collection;
+        $return_object = self::parse_array_to_objects( $result, $klass );
       }
 
       $result->free();
       return $return_object;
 
+    }
+
+    public function parse_array_to_objects( $result, $klass ) {
+      $collection = array();
+      while ( $row = $result->fetch_assoc() ) {
+        $object = $klass::load_record( $row );
+        $collection[] = $object;
+      }
+      return $collection;
     }
 
     /*

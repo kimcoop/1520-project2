@@ -1,4 +1,5 @@
-test:test:1234567:kac162@pitt.edu:Advisorson:Addy:0
+advisor:advisor:1234567:kac162@pitt.edu:Advisorson:Addy:1
+student:student:1234567:kac162@pitt.edu:Studenty:Stu:0
 Swordsman:IAmNotLeftHanded:1234567:kac162@pitt.edu:Montoya:Inigo:0
 Spaceman1:BeamMeUp10:7654321:kac162@pitt.edu:Kirk:James:0
 Spaceman22:EarlGreyHot:2222222:kac162@pitt.edu:Picard:JeanLuc:0
