@@ -22,7 +22,7 @@
         case "user_courses":
           return "UserCourse";
         case "requirement_courses":
-          return "RequirementCourses";
+          return "RequirementCourse";
         default:
           return "User";
       }

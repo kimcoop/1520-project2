@@ -1,21 +1,8 @@
 <?php
+
   abstract class DB {
     private static $host='localhost', $name='advisor-cloud', $user='root', $password='root';
     public static $db;
-/*
-    function __construct( $host, $name, $user, $password ) {
-      $this->host=$host;
-      $this->name=$name;
-      $this->user=$user;
-      $this->password=$password;
-
-      $db = new mysqli( $host, $user, $password, $name );
-      if ( $db->connect_errno > 0 )
-        die( 'Unable to connect to database [' . $db->connect_error . ']' );
-      else 
-        return $db;
-    }
-    */
 
     public function instance() {
       if ( self::$db == NULL ) 

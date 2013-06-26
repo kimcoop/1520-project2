@@ -91,14 +91,11 @@
         foreach( $reqs as $req ) {
         ?>
           <tr>  
-            <td>
-              <?php echo $req->title; ?>
-            </td>
-
+            <td><?php echo $req->title; ?></td>
             <td>
               <?php
               
-                if ( $req->is_satisfied( $_SESSION['viewing_psid'], $req ) ) {
+                if ( $course = $req->get_satisfying_course( $_SESSION['viewing_psid'] ) ) {
 
               ?>
 
@@ -117,8 +114,8 @@
           
             <?php
             
-              if ( $req->is_satisfied( $_SESSION['viewing_psid'], $req ) ) {
-                $req->print_satisfying_course( $_SESSION['viewing_psid'], $_SESSION['user_courses'] );
+              if ( $course ) {
+                echo $course;
               } else {
                 echo "<span class='muted'>Courses that satisfy this requirement: ";
                 $req->print_requirements();

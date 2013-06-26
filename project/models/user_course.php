@@ -79,6 +79,15 @@
       return $user_course;
     }
 
+
+    public static function where_one( $conditions ) {
+      return parent::where_one( 'user_courses', $conditions );
+    }
+
+    public static function where_many( $conditions ) {
+     return parent::where_many( 'user_courses', $conditions ); 
+    }
+
     public static function find_all_by_psid( $psid ) {
       $all = parent::where_many( 'user_courses', "psid='$psid'" );
       return $all;

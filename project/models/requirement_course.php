@@ -17,6 +17,11 @@
       return array( $this->id, $this->requirement_id, $this->course_id );
     }
 
+    public function __toString() {
+      $course = Course::find_by_id( $this->course_id );
+      return "$course->department $course->course_number";
+    }
+
     /*
     *
     * CLASS METHODS
@@ -50,6 +55,11 @@ public static function load_from_file( $line ) {
     public static function load_record( $record ) {
       $req_course = new RequirementCourse();
       $req_course->set_all( $record['id'], $record['requirement_id'], $record['course_id'] );
+      return $req_course;
+    }
+
+    public static function find_all_by_requirement_id( $req_id ) {
+      return parent::where_many( 'requirement_courses', "requirement_id='$req_id'" );
     }
 
     public static function load_from_file( $line ) {

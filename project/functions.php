@@ -2,6 +2,7 @@
 
 session_start();
 include 'models/user_course.php';
+include 'models/requirement_course.php';
 
 function __autoload($class) {
   $file = 'models/' . $class . '.php';

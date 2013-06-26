@@ -1,5 +1,6 @@
 <?php
 
+
   class Requirement extends Model {
     public $title, $category;
 
@@ -26,49 +27,63 @@
     }
 
     public function is_satisfied( $psid, $user_courses ) {
-      return !is_null( $this->get_satisfying_course( $psid, $user_courses ) );
+      echo 'todo';
+      // return !is_null( $this->get_satisfying_course( $psid, $user_courses ) );
     }
 
     public function print_satisfying_course( $psid, $user_courses ) {
-      $course = $this->get_satisfying_course( $psid, $user_courses );
-      echo $course->titleize();
+      echo 'todo';
+      // $course = $this->get_satisfying_course( $psid, $user_courses );
+      // echo $course->titleize();
     }
 
-    public function get_satisfying_course( $psid, $user_courses ) {
+    public function get_course_options() {
+      return RequirementCourse::find_all_by_requirement_id( $this->id );
+    }
+
+    public function get_satisfying_course( $psid ) {
+
+      $course_options = $this->get_course_options();
 
       $elective_index = 1;
       $course = NULL;
 
-      foreach( $this->course_options as $course_option ) {
+      foreach( $course_options as $course_option ) {
         $pieces = explode( ",", $course_option );
         $req_course_department = $pieces[0];
         $req_course_number = (int) $pieces[1];
 
+        $course = Course::where_one( "department='$req_course_department' AND course_number='$req_course_number'" );
+        $user_course = UserCourse::where_one( "psid='$psid' AND course_id='$course->id'" );
+
         if ( $this->is_elective && $elective_index <= $this->get_elective_number() ) { // effectively skip this course_record since it will satisfy other electives that preceeded it
           
-          if ( !is_null(get_user_course_record( $psid, $req_course_department, $req_course_number)) ) { // if the user has taken the course that would satisfy
+          if ( !is_null( $user_course ) ) { // if the user has taken the course that would satisfy
             $elective_index = $elective_index + 1;
             continue; // skip it
           }
 
-        } else {
-          $course = get_user_course_record( $psid, $req_course_department, $req_course_number);
         }
 
-        if ( !is_null( $course ) ) {
-          return $course;
-        }
+        if ( !is_null( $user_course ) )
+          return $user_course;
       }
+
       return NULL;
     }
 
     public function print_requirements() {
-      foreach( $this->course_options as $index => $req ) {
-        $pieces = explode( ",", $req );
-        $department = $pieces[0];
-        $number = (int) $pieces[1];
-        echo $department . "" . $number; // strip comma
-        if ( $index != count($this->course_options) -1 )
+
+      $course_options = $this->get_course_options();
+
+      foreach( $course_options as $index => $course_option ) {
+        echo $course_option;
+        // var_dump( $course_option );
+        // $pieces = explode( ",", $req );
+        // $department = $pieces[0];
+        // $number = (int) $pieces[1];
+        // echo $department . "" . $number; // strip comma
+        if ( $index != count($course_options) -1 )
           echo ", ";
       }
     }
