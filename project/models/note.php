@@ -23,7 +23,7 @@
     }
 
     public function get_contents() {
-      $filename = sprintf( "files/notes/%d:%s.txt", $psid, $timestamp );
+      $filename = sprintf( "files/notes/%d:%s.txt", $this->psid, $this->dashed_timestamp );
       $notes = file_get_contents( $filename );
       return $notes;
     }
@@ -41,10 +41,24 @@
   *
   */
 
+  public static function add_note( $psid, $contents ) {
+    $dashed_timestamp = parent::get_dashed_timestamp();
+    $note_timestamp = sprintf( "%d:%s", $psid, $dashed_timestamp );
+    $note = new Note();
+    $note->set_all( -1, $psid, $dashed_timestamp );
+
+    $filename = sprintf( "files/notes/%s.txt", $note_timestamp );
+    $append_success = file_put_contents( $filename, $contents, FILE_APPEND | LOCK_EX );
+
+    if ( $append_success )
+      $db_success = parent::insert( 'notes', $note );
+    
+    return $append_success && $db_success;
+  }
+
   public static function get_properties() {
     return "psid, dashed_timestamp";
   }
-
 
   public static function load_from_file( $line ) {
     $pieces = explode( ":", $line );

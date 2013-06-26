@@ -45,7 +45,10 @@
   }
 
   if ( isset($_POST['advising_notes_form_submit']) ) {
-    add_notes( $_SESSION['viewing_psid'], $_POST['note_content'] );
+    if ( Note::add_note( $_SESSION['viewing_psid'], $_POST['note_content'] )) 
+      display_notice( 'Note saved.', 'success' );
+    else
+      display_notice( 'Error saving note.', 'error' );
     header('Location: advisor.php?tab=advising_notes') ;
     exit();
   }
