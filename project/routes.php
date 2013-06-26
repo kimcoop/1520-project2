@@ -34,7 +34,12 @@
   }
 
   if ( isset($_POST['log_advising_session_form_submit']) ) {
-    log_advising_session( $_SESSION['viewing_psid'] );
+    if ( Session::log_advising_session( $_SESSION['viewing_psid'] )) {
+      $_SESSION['logging_session'] = true;
+      display_notice( 'Advising session logged.', 'success' );
+    } else {
+      display_notice( 'Error logging advising session.', 'error' );
+    }
     header('Location: advisor.php');
     exit();
   }

@@ -21,6 +21,12 @@
       return date( $format, mktime( $hour, $minute, $second, $month, $day, $year ));
     }
 
+
+    public static function get_dashed_timestamp() {
+      $date = new DateTime();
+      return $date->format('Y-m-d-H-i-s');
+    }
+
     public static function insert( $table, $entity ) {
       return DB::insert( $table, $entity );
     }

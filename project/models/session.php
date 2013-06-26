@@ -29,6 +29,14 @@
   *
   */
 
+  public static function log_advising_session( $psid ) {
+    $dashed_timestamp = parent::get_dashed_timestamp();
+    $session = new Session();
+    $session->set_all( -1, $psid, $dashed_timestamp );
+    return parent::insert( 'sessions', $session );
+  }
+
+
   public static function load_from_file( $line ) {
     $pieces = explode( ":", $line );
     $session = new Session();

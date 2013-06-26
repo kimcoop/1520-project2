@@ -21,10 +21,11 @@ define( "MAILER_SUBJECT", "Your AdvisorCloud Credentials" );
 define( "MAILER_SENDER", "kac162@pitt.edu" );
 
 function clear_search() {
-  $name = $_SESSION['student']['full_name'];
+  $name = $_SESSION['student']->get_full_name();
   unset( $_SESSION['student'] );
   unset( $_SESSION['viewing_psid'] );
   unset( $_SESSION['should_show_notes'] );
+  unset( $_SESSION['logging_session'] );
 }
 
 function current_user() {
@@ -103,28 +104,12 @@ function get_root_url() {
   *
   */
 
-
   function set_viewing_student( $student_user ) {
     $_SESSION['student'] = $student_user;
     $_SESSION['viewing_psid'] = $student_user->get_psid();
   }
 
-  function log_advising_session( $psid ) {
-    // TODO - insert into db
-    /*
-    $session_timestamp = get_formatted_timestamp();
-    $log_timestamp = sprintf( "%d:%s", $psid, $session_timestamp );
-
-    if ( file_put_contents( SESSIONS_FILE, "\n" . $log_timestamp, FILE_APPEND | LOCK_EX ) ) {
-      $_SESSION['logging_session'] = true;
-      $_SESSION['logging_session_timestamp'] = $log_timestamp;
-      display_notice( 'Advising session logged.', 'success' );
-    } else {
-      display_notice( 'Error logging advising session.', 'error' );
-    }*/
-
-  }
-
+  
   function add_notes( $psid, $notes ) {
     // TODO OOOO
     /*
