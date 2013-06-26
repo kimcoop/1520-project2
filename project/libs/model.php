@@ -6,6 +6,21 @@
       // $this->db = DB::instance();
     }
 
+    public static function make_date( $timestamp ) {
+
+      $format = 'l F jS, Y \a\t g:ia';
+      $pieces = explode( "-", $timestamp );
+      $year = (int) $pieces[0];
+      $month = (int) $pieces[1];
+      $day = (int) $pieces[2];
+      $hour = (int) $pieces[3];
+      $minute = (int) $pieces[4];
+      $second = (int) $pieces[5];
+
+      // return a nicely-formatted date timestamp for display
+      return date( $format, mktime( $hour, $minute, $second, $month, $day, $year ));
+    }
+
     public static function insert( $table, $entity ) {
       return DB::insert( $table, $entity );
     }
@@ -23,6 +38,10 @@
           return "UserCourse";
         case "requirement_courses":
           return "RequirementCourse";
+        case "notes":
+          return "Note";
+        case "sessions":
+          return "Session";
         default:
           return "User";
       }

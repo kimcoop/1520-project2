@@ -4,7 +4,7 @@
 
   <?php
     
-    $notes = get_advising_notes( $_SESSION['viewing_psid'] );
+    $notes = Note::find_all_by_psid( $_SESSION['viewing_psid'] );
 
     if ( count($notes) > 0 ) {
 
@@ -12,43 +12,29 @@
         ?>
 
         <tr>
+          <td>Note <?php echo $index + 1 ?></td>
+          <td><?php echo $note; ?></td>
           <td>
-            Note <?php echo $index + 1 ?>
-          </td>
-          <td>
-
-          <?php
-            echo $note['formatted_timestamp'];
-          ?>
-
-          </td>
-          <td>
-
             <?php
 
-              if ( should_show_notes( $note['timestamp'] ) ) {
-                echo get_notes( $_SESSION['viewing_psid'], $note['timestamp'] );
+              if ( $note->should_show() ) {
+                echo $note->get_contents();
               } else {
 
             ?>
 
             <form class="pull-right" action="routes.php" method="post" name="display_notes_form">
-              <button value="<?php echo $note['timestamp']; ?>" class="btn" type="submit" name="display_notes_form_submit">View &raquo;</button>
+              <button value="<?php echo $note->id; ?>" class="btn" type="submit" name="display_notes_form_submit">View &raquo;</button>
             </form>
 
             <?php
-
               }
-
             ?>
-
           </td>
         </tr>
-
       <?php
       } // foreach
     } else {
-
     ?>
 
     No advising notes found.

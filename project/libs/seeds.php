@@ -1,12 +1,13 @@
 <?php
 
-
   include( 'project/libs/db.php' );
   include( 'project/libs/storable_interface.php' );
   include( 'project/libs/model.php' );
 
   include( 'project/models/user.php' );
   include( 'project/models/course.php' );
+  include( 'project/models/note.php' );
+  include( 'project/models/session.php' );
   include( 'project/models/requirement.php' );
   include( 'project/models/requirement_course.php' );
   include( 'project/models/user_course.php' );
@@ -55,10 +56,14 @@
       UNIQUE INDEX department_course_number( department, course_number )
       )";
   
+    // NOTE: including department and course_number here is duplicative,
+    // but needed to avoid the queries to courses table during large iterations.
     $user_courses_sql = "CREATE TABLE user_courses(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       course_id int NOT NULL,
       psid int NOT NULL,
+      department varchar(255) NOT NULL,
+      course_number int NOT NULL,
       term varchar(255) NOT NULL,
       grade varchar(5) NOT NULL,
       UNIQUE INDEX course_psid_term( course_id, psid, term )
@@ -121,15 +126,16 @@
 
     echo "<strong>Populating tables from files...</strong><br/>";
     echo "<ul>";
+    
     populate_table( "User", "users" );
     populate_table( "Course", "courses" );
     populate_table( "Requirement", "requirements" );
     populate_table( "UserCourse", "courses", "user_courses" );
     populate_table( "RequirementCourse", "requirements", "requirement_courses", NO_INSERTION );
-    /*
-    DB::run( $user_courses_sql );
-    DB::run( $requirement_courses_sql );
-    */
+    // My files - not provided
+    populate_table( "Note", "notes" );
+    populate_table( "Session", "sessions" );
+
     echo "</ul>";
   }
 

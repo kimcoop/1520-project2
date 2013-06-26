@@ -2,12 +2,14 @@
 
   class UserCourse extends Model {
 
-    public $id, $course_id, $psid, $term, $grade;
+    public $id, $course_id, $psid, $department, $course_number, $term, $grade;
 
-    public function set_all( $id, $course_id, $psid, $term, $grade ) {
+    public function set_all( $id, $course_id, $psid, $department, $course_number, $term, $grade ) {
       $this->id = $id;
       $this->course_id = $course_id;
       $this->psid = $psid;
+      $this->department = $department;
+      $this->course_number = $course_number;
       $this->term = $term;
       $this->grade = $grade;
     }
@@ -28,7 +30,7 @@
     }
 
     public function get_values() {
-      return array( $this->id, $this->course_id, $this->psid, $this->term, $this->grade );
+      return array( $this->course_id, $this->psid, $this->department, $this->course_number, $this->term, $this->grade );
     }
 
     public function course() {
@@ -36,8 +38,7 @@
     }
 
     public function __toString() {
-      $course = $this->course();
-      return "$course->department $course->course_number $this->grade";
+      return "$this->department $this->course_number $this->grade";
     }
 
     /*
@@ -47,12 +48,12 @@
     */
 
     public static function get_properties() {
-      return "id, course_id, psid, term, grade";
+      return "course_id, psid, department, course_number, term, grade";
     }
 
     public static function load_record( $record ) {
       $user_course = new UserCourse();
-      $user_course->set_all( $record['id'], $record['course_id'], $record['psid'], $record['term'], $record['grade'] );
+      $user_course->set_all( $record['id'], $record['course_id'], $record['psid'], $record['department'], $record['course_number'], $record['term'], $record['grade'] );
       return $user_course;
     }
 
@@ -69,12 +70,9 @@
         $course = Course::load_from_file( $line ); // load new course into db
         $course->id = parent::insert( 'courses', $course );
       }
-
-      $user_course->course_id = $course->id;
-  
-      $user_course->term = $pieces[2];
-      $user_course->psid = $pieces[3];
-      $user_course->grade = trim( $pieces[4] );
+        
+      // text files will not include the ID, so default to -1
+      $user_course->set_all( -1, $course->id, $pieces[3], $department, $course_number, $pieces[2], trim( $pieces[4] ));
 
       return $user_course;
     }
@@ -95,13 +93,15 @@
 
     public static function find_by( $grouping, $psid ) {
       $all = self::find_all_by_psid( $psid );
+      if ( !$all )
+        return;
       $courses = array();
       foreach( $all as $course ) {
         if ( $course->psid == $psid ) {
           if ( $grouping == 'term' )
             $courses[ $course->term ][] = $course;
           else
-            $courses[ $course->course()->department ][] = $course;
+            $courses[ $course->department ][] = $course;
         }
       }
       return $courses;

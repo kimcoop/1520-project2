@@ -1,5 +1,4 @@
 <?php 
-
     if ( is_viewing_student() ) {
 
       $format = "%s, user ID %u, PeopleSoft #%u";

@@ -19,6 +19,9 @@
     }
 
     public function get_elective_number() {
+      // big hack - may be a better way to do this.
+      // if a course is an elective, get its elective number last char.
+      // ASSUMES elective number is last char in string
       if ( $this->is_elective() ) {
         $chars = strlen( $this->title );
         $elective_number = (int) $this->title[ $chars -1];
@@ -44,7 +47,7 @@
 
         if ( !is_null( $user_course ) && !$user_course->is_passing_grade() )
           continue;
-        
+
         if ( $this->is_elective() && $elective_index <= $this->get_elective_number() ) { 
           // effectively skip this course_record since it will satisfy other electives that preceeded it
           if ( !is_null( $user_course ) ) { // if the user has taken the course that would satisfy
@@ -60,20 +63,17 @@
       return NULL;
     }
 
-    public function print_requirements() {
+    public function get_requirements() {
 
       $course_options = $this->get_course_options();
+      $reqs = '';
 
       foreach( $course_options as $index => $course_option ) {
-        echo $course_option;
-        // var_dump( $course_option );
-        // $pieces = explode( ",", $req );
-        // $department = $pieces[0];
-        // $number = (int) $pieces[1];
-        // echo $department . "" . $number; // strip comma
+        $reqs .= $course_option;
         if ( $index != count($course_options) -1 )
-          echo ", ";
+          $reqs .= ", ";
       }
+      return $reqs;
     }
 
     public function get_values() {

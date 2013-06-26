@@ -14,7 +14,7 @@
     }
 
     public function get_values() {
-      return array( $this->id, $this->requirement_id, $this->course_id );
+      return array( $this->requirement_id, $this->course_id );
     }
 
     public function __toString() {
@@ -41,29 +41,10 @@
     *
     * CLASS METHODS
     *
-
-
-public static function load_from_file( $line ) {
-      $pieces = explode( ":", $line );
-      $requirement = new Requirement();
-      $requirement->title = $pieces[0];
-
-      // determine category
-      $pattern = '/Elec/';
-      if ( preg_match( $pattern, $requirement->title ) )
-        $requirement->category = 'elective';
-      else
-        $requirement->category = 'core';
-
-
-      // $requirement->course_options = explode( "|", $pieces[1] );
-      return $requirement;
-    }
-
     */
 
     public static function get_properties() {
-      return "id, requirement_id, course_id";
+      return "requirement_id, course_id";
     }
 
 

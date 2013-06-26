@@ -95,54 +95,6 @@ function get_root_url() {
   */
 
 
-function get_requirements() {
-  // populate a list of graduation requirements for the given $psid
-  // return Requirements::populate_requirements( REQS_FILE );
-  return Requirement::find_all( 'requirements' );
-}
-
-
-function get_user_course_record( $psid, $department, $number ) {
-
-  foreach( $_SESSION['user_courses'] as $user_course ) {
-
-    // ensure course grade is passing, course matches req department and number
-    if ( $user_course->is_passing_grade() && $user_course->department == $department && $user_course->course_number == $number ) {
-      return $user_course;
-    }
-
-  }
-
-  return NULL;
-
-}
-
-function requirements_met( $psid, $requirement ) {
-  
-  $course_options = $requirement->course_options;
-
-  // determine which satisfying courses (if any) for the given $requirement have been taken by the user
-  // with the given $psid
-
-  foreach( $course_options as $index => $req ) {
-
-    $pieces = explode( ",", $req );
-    $req_course_department = $pieces[0];
-    $req_course_number = (int) $pieces[1];
-
-    $user_course = get_user_course_record( $psid, $req_course_department, $req_course_number);
-    // if the user has a course_record for this course, he has satisfied the $requirement
-    if ( isset($user_course) ) {
-      return true;
-    }
-
-  }
-  // if we reach this point, we've exhausted the satisfying course options and therefore the user has not
-  // satisfied this $requirement
-  return false;
-}
-
-
   /* 
   *
 
@@ -159,6 +111,7 @@ function requirements_met( $psid, $requirement ) {
 
   function log_advising_session( $psid ) {
     // TODO - insert into db
+    /*
     $session_timestamp = get_formatted_timestamp();
     $log_timestamp = sprintf( "%d:%s", $psid, $session_timestamp );
 
@@ -168,17 +121,13 @@ function requirements_met( $psid, $requirement ) {
       display_notice( 'Advising session logged.', 'success' );
     } else {
       display_notice( 'Error logging advising session.', 'error' );
-    }
+    }*/
 
-  }
-
-  function get_formatted_timestamp() {
-    $date = new DateTime();
-    return $date->format('Y-m-d-H-i-s');
   }
 
   function add_notes( $psid, $notes ) {
-
+    // TODO OOOO
+    /*
     $timestamp = get_formatted_timestamp();
     $note_timestamp = sprintf( "%d:%s", $psid, $timestamp );
     $filename = sprintf( "files/notes/%s.txt", $note_timestamp );
@@ -188,92 +137,7 @@ function requirements_met( $psid, $requirement ) {
     } else {
       display_notice( 'Error logging advising notes.', 'error' );
     }
+    */
   }
-
-
-  function get_advising_notes( $psid ) {
-
-    $advising_notes = array();
-    $file_handle = fopen( NOTES_FILE, "r" );
-
-    while ( !feof($file_handle) ) {
-      $line = fgets( $file_handle );
-      
-      $pieces = explode( ":", $line );
-      if ( $pieces[0] == $psid ) {
-        $timestamp = clean( $pieces[1] );
-        $advising_note = array( "timestamp" => $timestamp, "formatted_timestamp" => make_date( $timestamp) );
-        $advising_notes[] = $advising_note;
-      }
-
-    }
-
-    fclose( $file_handle );
-    return $advising_notes;
-
-  }
-
-  function should_show_notes( $session_timestamp ) {
-    if ( !isset( $_SESSION['should_show_notes'] ) || !isset( $_SESSION['should_show_notes'][ $session_timestamp ] ) )
-      return false;
-    else 
-      return $_SESSION['should_show_notes'][ $session_timestamp ];
-  }
-
-  function set_should_show_notes( $psid, $session_timestamp, $should_show ) {
-    // set this to display or hide particular advising session notes
-    $_SESSION['should_show_notes'][ $session_timestamp ] = $should_show;
-  }
-
-  function get_notes( $psid, $timestamp ) {
-    
-    $filename = sprintf( "files/notes/%d:%s.txt", $psid, $timestamp );
-    $notes = file_get_contents( $filename );
-
-    return $notes;
-
-  }
-
-  function make_date( $timestamp ) {
-    $format = 'l F jS, Y \a\t g:ia';
-
-    $pieces = explode( "-", $timestamp );
-    $year = $pieces[0];
-    $month = $pieces[1];
-    $day = $pieces[2];
-    $hour = $pieces[3];
-    $minute = $pieces[4];
-    $second = $pieces[5];
-
-    // return a nicely-formatted date timestamp for display
-    return date( $format, mktime( $hour, $minute, $second, $month, $day, $year ));
-  }
-
-  function clean( $str ) {
-    // ensure we don't have any weird characters from reading in text files
-    return preg_replace( '/[^(\x20-\x7F)]*/','', $str );
-  }
-
-  function get_advising_sessions( $psid ) {
-    
-    $advising_sessions = array();
-    $file_handle = fopen( SESSIONS_FILE , "r" );
-
-    while ( !feof($file_handle) ) {
-      $line = fgets( $file_handle );
-      
-      $pieces = explode( ":", $line );
-      if ( $pieces[0] == $psid ) {
-        $timestamp = clean( $pieces[1] );
-        $advising_session = array( "timestamp" => $timestamp, "formatted_timestamp" => make_date( $timestamp) );
-        $advising_sessions[] = $advising_session;
-      }
-
-    }
-
-    fclose( $file_handle );
-    return $advising_sessions;
-  }
-
 
 ?>

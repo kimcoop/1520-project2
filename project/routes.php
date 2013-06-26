@@ -46,7 +46,7 @@
   }
 
   if ( isset($_POST['display_notes_form_submit']) ) {
-    set_should_show_notes( $_SESSION['viewing_psid'], $_POST['display_notes_form_submit'], true );
+    Note::set_should_show_notes( $_POST['display_notes_form_submit'], true );
     header('Location: advisor.php?tab=advising_notes');
     exit();
   }

@@ -1,33 +1,54 @@
 <?php
 
   class Session extends Model {
-    // $advising_note = array( "timestamp" => $timestamp, "formatted_timestamp" => make_date( $timestamp) );
-    public $psid, $timestamp;
+    public $id, $psid, $dashed_timestamp;
 
     public function __construct() {
       parent::__construct();
     }
 
-    public function get_formatted_timestamp() {
-      return make_date( $this->timestamp );
+    public function set_all( $id, $psid, $timestamp ) {
+      $this->id = $id;
+      $this->psid = $psid;
+      $this->dashed_timestamp = $timestamp;
     }
 
-    function make_date( $timestamp ) {
-      $format = 'l F jS, Y \a\t g:ia';
-
-      $pieces = explode( "-", $timestamp );
-      $year = $pieces[0];
-      $month = $pieces[1];
-      $day = $pieces[2];
-      $hour = $pieces[3];
-      $minute = $pieces[4];
-      $second = $pieces[5];
-
-      // return a nicely-formatted date timestamp for display
-      return date( $format, mktime( $hour, $minute, $second, $month, $day, $year ));
+    public function get_values() {
+      return array( $this->psid, $this->dashed_timestamp );
     }
 
+    public function __toString() {
+      $date = parent::make_date( $this->dashed_timestamp );
+      return $date;
+    }
+  
 
+  /*
+  *
+  * CLASS METHODS
+  *
+  */
+
+  public static function load_from_file( $line ) {
+    $pieces = explode( ":", $line );
+    $session = new Session();
+    $session->set_all( -1, $pieces[0], $pieces[1] ); // new entities have no ID
+    return $session;
   }
+
+  public static function get_properties() {
+    return "psid, dashed_timestamp";
+  }
+
+  public static function load_record( $record ) {
+    $session = new Session();
+    $session->set_all( $record['id'], $record[ "psid" ], $record[ "timestamp" ] );
+    return $session;
+  }
+
+  public static function find_all_by_psid( $psid ) {
+    return parent::where_many( 'sessions', "psid='$psid'" );
+  }
+}
 
 ?>

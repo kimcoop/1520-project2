@@ -32,8 +32,9 @@
 
       $sql = "INSERT IGNORE INTO $table( $keys ) VALUES( $values )";
       $result = self::run( $sql );
+      
       if ( $result ) 
-        return $mysqli->insert_id; // return ID of this (last) insertion
+        return self::$db->insert_id; // return ID of this (last) insertion
       else 
         return NULL;
     }
