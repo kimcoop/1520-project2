@@ -18,8 +18,23 @@
     }
 
     public function __toString() {
-      $course = Course::find_by_id( $this->course_id );
+      $course = $this->get_course();
       return "$course->department $course->course_number";
+    }
+
+    public function get_course() {
+      if ( !$this->course )
+        $this->course = Course::find_by_id( $this->course_id );
+      return $this->course;
+      
+    }
+
+    public function get_department() {
+      return $this->get_course()->department;
+    }
+
+    public function get_course_number() {
+      return $this->get_course()->course_number;
     }
 
     /*
