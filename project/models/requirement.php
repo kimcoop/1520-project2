@@ -42,13 +42,15 @@
         $course = Course::where_one( "department='$option_course_department' AND course_number='$option_course_number'" );
         $user_course = UserCourse::where_one( "psid='$psid' AND course_id='$course->id'" );
 
-        if ( $this->is_elective() && $elective_index <= $this->get_elective_number() ) { // effectively skip this course_record since it will satisfy other electives that preceeded it
-          
+        if ( !is_null( $user_course ) && !$user_course->is_passing_grade() )
+          continue;
+        
+        if ( $this->is_elective() && $elective_index <= $this->get_elective_number() ) { 
+          // effectively skip this course_record since it will satisfy other electives that preceeded it
           if ( !is_null( $user_course ) ) { // if the user has taken the course that would satisfy
             $elective_index = $elective_index + 1;
             continue; // skip it
           }
-
         }
 
         if ( !is_null( $user_course ) )
