@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+include 'models/user_course.php';
 
 function __autoload($class) {
   $file = 'models/' . $class . '.php';
@@ -8,19 +9,12 @@ function __autoload($class) {
     include $file;
   elseif ( file_exists( 'libs/'. $class . '.php' ))
     include 'libs/'. $class . '.php';
-  else
-    include 'libs/storable_interface.php';
 }
 
 date_default_timezone_set( 'America/New_York' );
 
 define( "STUDENT_ACCESS_LEVEL", 0 );
 define( "ADVISOR_ACCESS_LEVEL", 1 );
-define( "USERS_FILE", 'files/users.txt' );
-define( "COURSES_FILE", 'files/courses.txt' );
-define( "REQS_FILE", 'files/reqs.txt' );
-define( "SESSIONS_FILE", 'files/sessions.txt' );
-define( "NOTES_FILE", 'files/notes.txt' );
 
 define( "MAILER_SUBJECT", "Your AdvisorCloud Credentials" );
 define( "MAILER_SENDER", "kac162@pitt.edu" );

@@ -1,6 +1,6 @@
 <?php
 
-  class Requirement extends Model implements Storable {
+  class Requirement extends Model {
     public $title, $category;
 
     function __construct() {

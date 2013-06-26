@@ -1,6 +1,6 @@
 <?php
 
-  class Note extends Model implements Storable {
+  class Note extends Model {
     // $advising_note = array( "timestamp" => $timestamp, "formatted_timestamp" => make_date( $timestamp) );
     public $psid, $timestamp;
 

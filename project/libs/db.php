@@ -69,15 +69,14 @@
       $sql = "SELECT * FROM $table WHERE $conditions";
       $result = self::run( $sql );
       $return_object = NULL;
-
+      
       if ( $result->num_rows == 0 )
         return NULL;
 
-      if ( $one_or_many == 'one' ) {
+      if ( $one_or_many == 'one' )
         $return_object = $klass::load_record( $result->fetch_assoc() );
-      } else {
+      else
         $return_object = self::parse_array_to_objects( $result, $klass );
-      }
 
       $result->free();
       return $return_object;

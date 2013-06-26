@@ -1,30 +1,11 @@
 <?php
 
-  class Course extends Model implements Storable {
+  class Course extends Model {
 
     public $id, $department, $course_number;
 
     function __construct() {
       parent::__construct();
-    }
-
-    public function print_with_grade() {
-      echo $this->get_with_grade();
-    }
-
-    public function get_with_grade() {
-      $format = "%s %s (grade %s)";
-      return sprintf( $format, $this->department, $this->course_number, $this->grade );
-    }
-
-    public function titleize() {
-      $format = "%s %s (term %s, grade %s)";
-      return sprintf( $format, $this->department, $this->course_number, $this->term, $this->grade );
-    }
-
-    public function is_passing_grade() {
-      $passing_grades = array("A+", "A", "A-", "B+", "B", "B-", "C+", "C");
-      return in_array( $this->grade, $passing_grades ); 
     }
 
     public function get_values() {
@@ -46,6 +27,10 @@
     * CLASS METHODS
     *
     */
+
+    public static function find_by_id( $id ) {
+      return parent::where_one( 'courses', "id='$id'" );
+    }
 
     public static function where_one( $conditions ) {
       return parent::where_one( 'courses', $conditions );

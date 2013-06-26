@@ -1,6 +1,6 @@
 <?php
 
-  class User extends Model implements Storable {
+  class User extends Model {
 
     private $access_level, 
       $email, 

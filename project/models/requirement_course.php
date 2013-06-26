@@ -1,6 +1,6 @@
 <?php
 
-  class RequirementCourse extends Model implements Storable {
+  class RequirementCourse extends Model {
 
     public $id, $requirement_id, $course_id;
     // belongs_to
