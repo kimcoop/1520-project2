@@ -21,10 +21,16 @@
       return date( $format, mktime( $hour, $minute, $second, $month, $day, $year ));
     }
 
-
     public static function get_dashed_timestamp() {
       $date = new DateTime();
       return $date->format('Y-m-d-H-i-s');
+    }
+
+
+    public static function update( $table, $entity, $updates ) {
+      $pk = self::pk_for_table( $table );
+      $where = "$pk='" . $entity->get( $pk ) . "'";
+      return DB::update( $table, $entity, $updates, $where );
     }
 
     public static function insert( $table, $entity ) {
@@ -51,6 +57,17 @@
         default:
           return "User";
       }
+    }
+
+    public static function pk_for_table( $table ) {
+      // determine the primary key for table to be used in UPDATE statement
+      // btw this is SUPER ugly. find a better way
+      switch ( $table ) {
+        case "users":
+          return "psid";
+        default:
+          return "id";
+      } 
     }
 
     public static function where_one( $table, $conditions ) {

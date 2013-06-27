@@ -20,15 +20,24 @@
     $user = User::signin( $_POST['user_id'], $_POST['password'] );
         
     if ( is_logged_in() ) {
-      if ( is_student() )
-        header('Location: student.php');
-      else
-        header('Location: advisor.php');
+      $url = get_root_url();
+      header( "Location: $url" );
     } else {
       display_notice( 'Error logging in.', 'error' );
       header( 'Location: index.php' );
     }
 
+    exit();
+
+  }
+
+  if ( isset( $_POST['change_password_form_submit'] ) ) {
+    if ( current_user()->change_password( $_POST['old_password'], $_POST['new_password'], $_POST['new_password_confirm'] ))
+      display_notice( 'Password changed.', 'success' );
+    else
+      display_notice( '<strong>Error changing password.</strong> Please ensure you\'ve properly entered your current password and that new passwords match.', 'error' );
+
+    header( "Location: settings.php" );
     exit();
 
   }
@@ -80,7 +89,7 @@
     }
 
   } elseif ( $_GET['action'] == 'new_search' ) {
-
+    $name = $_SESSION['student']->get_full_name();
     clear_search();
     display_notice( "Advising session for $name ended.", 'success' );
     header( 'Location: advisor.php' );

@@ -39,6 +39,11 @@
         return NULL;
     }
 
+    public function update( $table, $entity, $updates, $where ) {
+      $sql = "UPDATE $table SET $updates WHERE $where";
+      return self::run( $sql );
+    }
+
     public function select_all( $table, $klass ) {
       $sql = "SELECT * FROM $table";
       $result = self::run( $sql );

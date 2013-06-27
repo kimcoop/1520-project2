@@ -150,5 +150,7 @@
   create_tables();
   populate_tables();
 
+  echo "<br><strong>Done!</strong>";
+
 
 ?>

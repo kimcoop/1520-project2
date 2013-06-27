@@ -16,14 +16,33 @@
       parent::__construct();
     }
 
-    public function set_password( $new_password ) {
-      $hashed_password = hash( 'sha256', $new_password );
-      $this->password = $hashed_password;
-      // $this->save(); //TODO
+    public function change_password( $old_password, $new_password, $new_password_confirm ) {
+
+      // ensure presence of all parameters and ensure new password + confirmation match
+      if ( !$old_password || !$new_password || !$new_password_confirm || (( $new_password != $new_password_confirm )))
+        return false;
+
+      $hash_old = hash( 'sha256', $old_password );
+
+      // ensure user input is valid
+      if ( $this->get_password() != $hash_old ) {
+        return false;
+      }
+
+      $hash_new = hash( 'sha256', $new_password );
+      $hash_new_confirm = hash( 'sha256', $new_password_confirm );
+
+      $this->password = $hash_new;
+
+      return User::update( 'users', $this, "password='$hash_new'" );
     }
 
     public function get_values() {
       return array( $this->psid, $this->access_level, $this->user_id, $this->email, $this->first_name, $this->last_name, $this->password, $this->secret_question, $this->secret_answer );
+    }
+
+    public function get( $property ) {
+      return $this->$property;
     }
 
     public function get_user_id() {
