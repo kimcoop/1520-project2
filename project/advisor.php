@@ -66,16 +66,34 @@
 
       ?>
 
-      <p>Welcome to your advisor dashboard. Use the search form below to look up a student by student's PeopleSoft ID or first name/last name.</p>
+      <p>Welcome to your advisor dashboard. Use the inputs below to look up a student or course.</p>
 
-      <form class="navbar-search pull-left" action="routes.php" method="get" name="search_student_form">
-        <div class="input-prepend">
-            <span class="add-on"><i class="icon-search"></i></span>
-            <input autofocus placeholder="Search term" type="text" name="student_search_term">
+      <div class="row">
+        <div class="span4">
+          <h3>Search for a Student</h3>
+          <form action="routes.php" method="get" name="search_student_form">
+            <input class="input-block-level" autofocus placeholder="<PeopleSoft #> or <FirstName LastName>" type="text" name="student_search_term">
+            <button type="submit" class="btn search-button" name="search_student_form_submit">
+              <i class="icon-search"></i>&nbsp;
+              Search students
+            </button>
+          </form>
         </div>
-        <button type="submit" class="btn search-button" name="search_student_form_submit">Search</button>
-      </form>
-      <br>
+
+      <div class="span5">
+        <h3>Search for a Course</h3>
+        <form action="routes.php" method="get" name="search_course_form">
+          <input placeholder="Department" type="text" name="department">
+          <input placeholder="Course number" type="text" name="course_number">
+          <button type="submit" class="btn search-button" name="search_course_form_submit">
+            <i class="icon-search"></i>&nbsp;
+            Search courses
+          </button>
+        </form>
+      </div>
+      
+
+    </div>
 
     <?php
 
@@ -87,7 +105,7 @@
     </div><!-- .main-content-->
 
     <div class="span3 side-content">
-        <?php include('templates/sidebar.php'); ?>
+        <?php include('templates/student_sidebar.php'); ?>
     </div><!-- .side-content -->
 
   </div><!-- .row -->

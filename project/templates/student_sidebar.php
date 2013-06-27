@@ -30,7 +30,7 @@
     <?php
       }
     ?>
-    <a href="routes.php?action=new_search" class="btn btn-block btn-primary">View another student record</a>
+    <a href="routes.php?action=new_search" class="btn btn-block btn-primary">Back to Search</a>
 
   </aside>
   <aside class="well">

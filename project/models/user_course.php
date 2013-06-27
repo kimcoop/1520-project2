@@ -3,6 +3,7 @@
   class UserCourse extends Model {
 
     public $id, $course_id, $psid, $department, $course_number, $term, $grade;
+    public $user;
 
     public function set_all( $id, $course_id, $psid, $department, $course_number, $term, $grade ) {
       $this->id = $id;
@@ -13,16 +14,6 @@
       $this->term = $term;
       $this->grade = $grade;
     }
-
-    // public function get_with_grade() {
-    //   $format = "%s %s (grade %s)";
-    //   return sprintf( $format, $this->department, $this->course_number, $this->grade );
-    // }
-
-    // public function titleize() {
-    //   $format = "%s %s (term %s, grade %s)";
-    //   return sprintf( $format, $this->department, $this->course_number, $this->term, $this->grade );
-    // }
 
     public function is_passing_grade() {
       $passing_grades = array("A+", "A", "A-", "B+", "B", "B-", "C+", "C");
@@ -41,11 +32,22 @@
       return "$this->department $this->course_number $this->grade";
     }
 
+    public function user() {
+      if ( !$this->user )
+        $this->user = User::find_by_psid( $this->psid );
+      return $this->user;
+    }
+
+
     /*
     *
     * CLASS METHODS
     *
     */
+
+    public static function find_all_by_course_id( $course_id ) {
+      return parent::where_many( 'user_courses', "course_id='$course_id'" );
+    }
 
     public static function get_properties() {
       return "course_id, psid, department, course_number, term, grade";
@@ -76,7 +78,6 @@
 
       return $user_course;
     }
-
 
     public static function where_one( $conditions ) {
       return parent::where_one( 'user_courses', $conditions );

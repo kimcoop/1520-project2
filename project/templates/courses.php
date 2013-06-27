@@ -34,7 +34,7 @@
         $courses_by_department = UserCourse::find_by( 'department', $_SESSION['viewing_psid'] );
 
         if ( !empty($courses_by_department) ) {
-          asort( $courses_by_department ); // TODO - this may be tricky
+          ksort( $courses_by_department ); // TODO - this may be tricky
           foreach( $courses_by_department as $department => $courses ) { ?>
             <tr>
               <td><?php echo $department; ?></td>

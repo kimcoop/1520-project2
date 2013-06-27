@@ -26,8 +26,7 @@ function was_posted( $name ) {
   return isset( $_POST[$name] );
 }
 
-function clear_search() {
-  $name = $_SESSION['student']->get_full_name();
+function clear_viewing_student() {
   unset( $_SESSION['student'] );
   unset( $_SESSION['viewing_psid'] );
   unset( $_SESSION['should_show_notes'] );
@@ -59,6 +58,10 @@ function is_viewing_student() {
  return isset( $_SESSION['student'] ); 
 }
 
+function is_viewing_course() {
+  return isset( $_GET['course_id'] );
+}
+
 function is_logging_session() {
  return isset( $_SESSION['logging_session'] ); 
 }
@@ -74,6 +77,23 @@ function get_root_url() {
   else
     return 'advisor.php';
 }
+
+function sort_by_term( $a, $b ) {
+  if ( $a->term == $b->term )
+    return 0;
+  else
+    return ( $a->term < $b->term ? -1 : 1 );
+}
+
+
+function sort_by_department( $a, $b ) {
+  if ( $a->department == $b->department )
+    return 0;
+  else
+    return ( $a->department < $b->department ? -1 : 1 );
+}
+
+
 
   /* 
   *

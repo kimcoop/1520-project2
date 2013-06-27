@@ -178,19 +178,32 @@
     if ( $user = User::find_user_by_psid_or_name( $_GET['student_search_term'] )) {
       set_viewing_student( $user );
       display_notice( "Viewing report for " . $user->get_full_name(), 'success' );
-      header( "Location: advisor.php?student_id=$user->get_user_id()" );
-      exit();
     } else {
       $search = $_GET['student_search_term'];
       display_notice( "User '$search' not found.", 'error' );
-      header( 'Location: advisor.php' );
-      exit();
     }
+    header( "Location: advisor.php" );
+    exit();
+
+  } elseif ( isset($_GET['search_course_form_submit']) ) {
+    clear_viewing_student();
+    $department = $_GET['department'];
+    $course_number = $_GET['course_number'];
+    if ( $course = Course::find_by_department_and_course_number($department, $course_number) ) {
+      $course_id = $course->id;
+      header( "Location: course.php?course_id=$course_id" );
+    } else {
+      display_notice( "Course '$department $course_number' not found.", 'error' );
+      header( "Location: advisor.php" );
+    }
+    exit();
 
   } elseif ( $_GET['action'] == 'new_search' ) {
-    $name = $_SESSION['student']->get_full_name();
-    clear_search();
-    display_notice( "Advising session for $name ended.", 'success' );
+    if ( is_viewing_student() ) {
+      $name = $_SESSION['student']->get_full_name();
+      display_notice( "Advising session for $name ended.", 'success' );
+    }
+    clear_viewing_student();
     header( 'Location: advisor.php' );
 
   } else {
