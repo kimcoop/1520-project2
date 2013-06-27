@@ -6,6 +6,8 @@
       $ADVISOR_ACCESS_LEVEL = 1,
       $ADMIN_ACCESS_LEVEL = 2;
 
+    public $is_logging_session = FALSE;
+
     private $access_level, 
       $email, 
       $first_name, 
@@ -18,6 +20,13 @@
 
     function __construct() {
       parent::__construct();
+    }
+
+    function is_logging_session( $value=NULL ) {
+      if ( !$value )
+        return $this->is_logging_session;
+      else
+        $this->is_logging_session = $value;
     }
 
     public function change_password( $old_password, $new_password, $new_password_confirm ) {
@@ -56,7 +65,6 @@
     public function get( $property ) {
       return $this->$property;
     }
-
 
     public function is_student() {
       return $this->get_access_level() == $this->STUDENT_ACCESS_LEVEL;

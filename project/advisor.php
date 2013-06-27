@@ -2,7 +2,10 @@
 
 <?php
 
-  if ( is_logged_in() && is_advisor() ) {
+  if ( is_logged_in() && is_advisor() ):
+    clear_browsing_session(); // clear out old search session (student or course)
+    echo 'cleared!<br>****';
+
 
 ?>
 
@@ -10,66 +13,17 @@
     <div class="main-content span9">
       
       <div class="hgroup">
-
-        <?php
-          if ( should_show_notice() ) {
-        ?>
-
-          <div class="alert alert-<?php echo $_SESSION['notice']['type']; ?>">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <?php echo $_SESSION['notice']['message']; ?>
-          </div>
-
-        <?php
-          unset( $_SESSION['notice'] );
-          }
-        ?>
-
         <h2>
-          <?php echo $_SESSION['user']->get_first_name(); ?>'s 
+          <?php echo current_user()->get_first_name(); ?>'s 
           <span class="light">Advisor Dashboard</span>
         </h2>
-
+        <?php include('templates/notice.php') ?>
       </div><!-- .hgroup -->
-
-
-      <?php
-        if ( is_viewing_student() ) {
-      ?>
-
-        <ul class="nav nav-tabs">
-          <li <?php if (is_active_tab('courses')) echo 'class="active"'; ?>><a href="#courses" data-toggle="tab">Courses</a></li>
-          <li <?php if (is_active_tab('advising_sessions')) echo 'class="active"'; ?>><a href="#advising_sessions" data-toggle="tab">Advising Sessions</a></li>
-          <li <?php if (is_active_tab('advising_notes')) echo 'class="active"'; ?>><a href="#advising_notes" data-toggle="tab">Advising Notes</a></li>
-        </ul>
-
-        <div class="tab-content">
-
-          <div class="tab-pane <?php if (is_active_tab('courses')) echo 'active'; ?>" id="courses">
-            <?php include('templates/courses.php'); ?>
-          </div><!-- #courses -->
-
-          <div class="tab-pane <?php if (is_active_tab('advising_sessions')) echo 'active'; ?>" id="advising_sessions">
-            <?php include('templates/sessions.php'); ?>
-          </div><!-- #advising -->
-
-          <div class="tab-pane <?php if (is_active_tab('advising_notes')) echo 'active'; ?>" id="advising_notes">
-            <?php include('templates/notes.php'); ?>
-          </div><!-- #notes -->
-
-        </div><!-- .tab-content -->
-
-
-      <?php
-          
-        } else { // not viewing student
-
-      ?>
 
       <p>Welcome to your advisor dashboard. Use the inputs below to look up a student or course.</p>
 
-      <div class="row">
-        <div class="span4">
+      <div class="row row-search">
+        <div class="span4 search-student">
           <h3>Search for a Student</h3>
           <form action="routes.php" method="get" name="search_student_form">
             <input class="input-block-level" autofocus placeholder="<PeopleSoft #> or <FirstName LastName>" type="text" name="student_search_term">
@@ -78,46 +32,28 @@
               Search students
             </button>
           </form>
-        </div>
+        </div><!-- .search-student -->
 
-      <div class="span5">
-        <h3>Search for a Course</h3>
-        <form action="routes.php" method="get" name="search_course_form">
-          <input placeholder="Department" type="text" name="department">
-          <input placeholder="Course number" type="text" name="course_number">
-          <button type="submit" class="btn search-button" name="search_course_form_submit">
-            <i class="icon-search"></i>&nbsp;
-            Search courses
-          </button>
-        </form>
-      </div>
+        <div class="span5 search-course">
+          <h3>Search for a Course</h3>
+          <form action="routes.php" method="get" name="search_course_form">
+            <input placeholder="Department" type="text" name="department">
+            <input placeholder="Course number" type="text" name="course_number">
+            <button type="submit" class="btn search-button" name="search_course_form_submit">
+              <i class="icon-search"></i>&nbsp;
+              Search courses
+            </button>
+          </form>
+        </div><!-- .search-course -->
       
 
-    </div>
+    </div><!-- .row-search -->
+  </div><!-- .main-content-->
 
-    <?php
-
-      } // viewing student
-
-    ?>
-
-    
-    </div><!-- .main-content-->
-
-    <div class="span3 side-content">
-        <?php include('templates/student_sidebar.php'); ?>
-    </div><!-- .side-content -->
-
-  </div><!-- .row -->
+</div><!-- .row -->
 
 
-<?php
-
-} else {
-    
-?>
-
-  
+<?php else: ?>
 
   <br>
   <div class="alert alert-error">
@@ -127,10 +63,6 @@
   <a class="btn btn-primary" href="index.php">Login</a>
 
 
-<?php 
-
-  }
-
-?>
+<?php endif; ?>
 
 <?php include('templates/footer.php'); ?>

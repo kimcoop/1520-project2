@@ -14,10 +14,6 @@ function __autoload($class) {
 
 date_default_timezone_set( 'America/New_York' );
 
-define( "STUDENT_ACCESS_LEVEL", 0 );
-define( "ADVISOR_ACCESS_LEVEL", 1 );
-define( "ADMIN_ACCESS_LEVEL", 2 );
-
 define( "MAILER_SUBJECT", "Your AdvisorCloud Credentials" );
 define( "MAILER_SENDER", "kac162@pitt.edu" );
 
@@ -26,16 +22,14 @@ function was_posted( $name ) {
   return isset( $_POST[$name] );
 }
 
-function clear_viewing_student() {
-  unset( $_SESSION['student'] );
+function clear_browsing_session() {
   unset( $_SESSION['viewing_psid'] );
   unset( $_SESSION['should_show_notes'] );
-  unset( $_SESSION['logging_session'] );
+  current_user()->is_logging_session( false );
 }
 
 function current_user() {
-  $user = $_SESSION['user'];
-  return $user;
+  return $_SESSION['user'];
 }
 
 function is_logged_in() {
@@ -55,15 +49,11 @@ function is_admin() {
 }
 
 function is_viewing_student() {
- return isset( $_SESSION['student'] ); 
+ return isset( $_GET['user_id'] ); 
 }
 
 function is_viewing_course() {
   return isset( $_GET['course_id'] );
-}
-
-function is_logging_session() {
- return isset( $_SESSION['logging_session'] ); 
 }
 
 function should_show_notice() {
@@ -73,7 +63,7 @@ function should_show_notice() {
 function get_root_url() {
   // used in the nav bar, to correctly link the brand href
   if ( is_student() ) 
-    return 'student.php'; 
+    return 'student_dashboard.php'; 
   else
     return 'advisor.php';
 }
@@ -139,20 +129,5 @@ function sort_by_department( $a, $b ) {
     $_SESSION['viewing_psid'] = $student_user->get_psid();
   }
 
-  
-  function add_notes( $psid, $notes ) {
-    // TODO OOOO
-    /*
-    $timestamp = get_formatted_timestamp();
-    $note_timestamp = sprintf( "%d:%s", $psid, $timestamp );
-    $filename = sprintf( "files/notes/%s.txt", $note_timestamp );
-
-    if ( file_put_contents( NOTES_FILE, "\n" . $note_timestamp , FILE_APPEND | LOCK_EX ) && file_put_contents( $filename, $notes, FILE_APPEND | LOCK_EX ) ) {
-      display_notice( 'Advising session notes added.', 'success' );
-    } else {
-      display_notice( 'Error logging advising notes.', 'error' );
-    }
-    */
-  }
 
 ?>

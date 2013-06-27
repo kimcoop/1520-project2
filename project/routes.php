@@ -145,7 +145,7 @@
 
   if ( was_posted('log_advising_session_form_submit') ) {
     if ( Session::log_advising_session( $_SESSION['viewing_psid'] )) {
-      $_SESSION['logging_session'] = true;
+      current_user()->is_logging_session( true );
       display_notice( 'Advising session logged.', 'success' );
     } else {
       display_notice( 'Error logging advising session.', 'error' );
@@ -173,38 +173,32 @@
     session_destroy();
     header('Location: index.php') ;
     exit();
+    
   } elseif ( isset($_GET['student_search_term']) ) {
-
-    if ( $user = User::find_user_by_psid_or_name( $_GET['student_search_term'] )) {
-      set_viewing_student( $user );
-      display_notice( "Viewing report for " . $user->get_full_name(), 'success' );
+    $search_term = $_GET['student_search_term'];
+    if ( $user = User::find_user_by_psid_or_name( $search_term )) {
+      $user_id = $user->get_user_id();
+      header( "Location: student.php?user_id=$user_id" );
+      // set_viewing_student( $user );
+      // display_notice( "Viewing report for " . $user->get_full_name(), 'success' );
     } else {
       $search = $_GET['student_search_term'];
-      display_notice( "User '$search' not found.", 'error' );
+      display_notice( "User <strong>$search</strong> not found.", 'error' );
+      header( "Location: advisor.php" );
     }
-    header( "Location: advisor.php" );
     exit();
 
   } elseif ( isset($_GET['search_course_form_submit']) ) {
-    clear_viewing_student();
     $department = $_GET['department'];
     $course_number = $_GET['course_number'];
     if ( $course = Course::find_by_department_and_course_number($department, $course_number) ) {
       $course_id = $course->id;
       header( "Location: course.php?course_id=$course_id" );
     } else {
-      display_notice( "Course '$department $course_number' not found.", 'error' );
+      display_notice( "Course <strong>$department $course_number</strong> not found.", 'error' );
       header( "Location: advisor.php" );
     }
     exit();
-
-  } elseif ( $_GET['action'] == 'new_search' ) {
-    if ( is_viewing_student() ) {
-      $name = $_SESSION['student']->get_full_name();
-      display_notice( "Advising session for $name ended.", 'success' );
-    }
-    clear_viewing_student();
-    header( 'Location: advisor.php' );
 
   } else {
     $str = 'Route '. $_GET['action'] .' not recognized.';

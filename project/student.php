@@ -2,46 +2,60 @@
 
 <?php
 
-  if ( is_logged_in() && is_student() ) {
+  if ( is_logged_in() && is_advisor() ):
+    $student = User::find_by_user_id( $_GET['user_id'] );
 
 ?>
-  
-  <div class="hgroup">
-    
-    <h2>
-      <?php echo current_user()->get_first_name(); ?>'s
-      <span class="light">Student Dashboard</span>
-    </h2>
 
-    <p>
-      Welcome to your dashboard. Here you'll find records of courses you've taken.
-    </p>
 
-  </div><!-- .hgroup -->
+  <div class="row">
+    <div class="main-content span9">
+      
+      <div class="hgroup">
+        <h2>Details for Student: <?php echo $student->get_full_name() ?></h2>
+        <?php include('templates/notice.php') ?>
 
-  <hr>
+      </div><!-- .hgroup -->
+      <ul class="nav nav-tabs">
+        <li <?php if (is_active_tab('courses')) echo 'class="active"'; ?>><a href="#courses" data-toggle="tab">Courses</a></li>
+        <li <?php if (is_active_tab('advising_sessions')) echo 'class="active"'; ?>><a href="#advising_sessions" data-toggle="tab">Advising Sessions</a></li>
+        <li <?php if (is_active_tab('advising_notes')) echo 'class="active"'; ?>><a href="#advising_notes" data-toggle="tab">Advising Notes</a></li>
+      </ul>
 
-  <?php include('templates/courses.php') ?>
+      <div class="tab-content">
+        <div class="tab-pane <?php if (is_active_tab('courses')) echo 'active'; ?>" id="courses">
+          <?php include('templates/courses.php'); ?>
+        </div><!-- #courses -->
 
-<?php
+        <div class="tab-pane <?php if (is_active_tab('advising_sessions')) echo 'active'; ?>" id="advising_sessions">
+          <?php include('templates/sessions.php'); ?>
+        </div><!-- #advising -->
 
-  } else {
+        <div class="tab-pane <?php if (is_active_tab('advising_notes')) echo 'active'; ?>" id="advising_notes">
+          <?php include('templates/notes.php'); ?>
+        </div><!-- #notes -->
+      </div><!-- .tab-content -->
 
-?>
+
+    </div><!-- .main-content-->
+
+    <div class="span3 side-content">
+      <?php include('templates/student_sidebar.php'); ?>
+    </div><!-- .side-content -->
+
+  </div><!-- .row -->
+
+<?php else: ?>
 
   <br>
   <div class="alert alert-error">
-    <strong>Sorry</strong> You must be logged in as a student to view this page.
+    <strong>Sorry</strong> You must be logged in to view this page.
   </div>
 
   <a class="btn btn-primary" href="index.php">Login</a>
 
 
-<?php 
-
-  }
-
-?>
+<?php endif; ?>
 
 <?php include('templates/footer.php') ?>
 
