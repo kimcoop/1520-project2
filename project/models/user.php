@@ -17,7 +17,7 @@
     }
 
     public function change_password( $old_password, $new_password, $new_password_confirm ) {
-
+      // TODO: sanitize
       // ensure presence of all parameters and ensure new password + confirmation match
       if ( !$old_password || !$new_password || !$new_password_confirm || (( $new_password != $new_password_confirm )))
         return false;
@@ -35,6 +35,13 @@
       $this->password = $hash_new;
 
       return User::update( 'users', $this, "password='$hash_new'" );
+    }
+
+    public function set_secret_question( $question, $answer ) {
+      // TODO: sanitize
+      $this->secret_question = $question;
+      $this->secret_answer = $answer;
+      return User::update( 'users', $this, "secret_question='$question', secret_answer='$answer'" );
     }
 
     public function get_values() {
@@ -75,6 +82,14 @@
 
     public function get_access_level() {
       return $this->access_level;
+    }
+
+    public function get_secret_question() {
+      return $this->secret_question;
+    }
+
+    public function get_secret_answer() {
+      return $this->secret_answer;
     }
 
     public function set_all( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id ) {

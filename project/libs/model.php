@@ -30,7 +30,7 @@
     public static function update( $table, $entity, $updates ) {
       $pk = self::pk_for_table( $table );
       $where = "$pk='" . $entity->get( $pk ) . "'";
-      return DB::update( $table, $entity, $updates, $where );
+      return DB::update( $table, $updates, $where );
     }
 
     public static function insert( $table, $entity ) {

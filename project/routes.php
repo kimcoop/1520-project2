@@ -31,12 +31,23 @@
 
   }
 
+
+
   if ( isset( $_POST['change_password_form_submit'] ) ) {
     if ( current_user()->change_password( $_POST['old_password'], $_POST['new_password'], $_POST['new_password_confirm'] ))
       display_notice( 'Password changed.', 'success' );
     else
       display_notice( '<strong>Error changing password.</strong> Please ensure you\'ve properly entered your current password and that new passwords match.', 'error' );
+    header( "Location: settings.php" );
+    exit();
 
+  }
+
+  if ( isset( $_POST['secret_question_form_submit'] ) ) {
+    if ( current_user()->set_secret_question( $_POST['secret_question'], $_POST['secret_answer'] ))
+      display_notice( 'Secret question saved.', 'success' );
+    else
+      display_notice( 'Error saving secret question.', 'error' );
     header( "Location: settings.php" );
     exit();
 

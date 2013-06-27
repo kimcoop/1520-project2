@@ -39,7 +39,7 @@
         return NULL;
     }
 
-    public function update( $table, $entity, $updates, $where ) {
+    public function update( $table, $updates, $where ) {
       $sql = "UPDATE $table SET $updates WHERE $where";
       return self::run( $sql );
     }

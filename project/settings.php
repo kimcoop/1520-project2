@@ -9,7 +9,7 @@
   <div class="hgroup">
     <h2>Settings</h2>
     <?php include('templates/notice.php') ?>
-    
+
   </div><!-- .hgroup -->
 
   <hr>
@@ -32,6 +32,23 @@
       <br>
 
       <button name="change_password_form_submit" type="submit" class="btn">Submit</button>
+    </fieldset>
+  </form>
+
+  <h3>Secret Question</h3>
+  <form action="routes.php" method="post" name="secret_question_form">
+
+    <fieldset>
+      <label>Secret question</label>
+      <input type="text" placeholder="Mother's maiden name..." name="secret_question" value="<?php echo current_user()->get_secret_question()?>">
+
+      <label>Secret answer</label>
+      <input type="text" placeholder="Secret answer here" name="secret_answer" value="<?php echo current_user()->get_secret_answer()?>">
+      
+      <br>
+      <br>
+
+      <button name="secret_question_form_submit" type="submit" class="btn">Submit</button>
     </fieldset>
   </form>
 
