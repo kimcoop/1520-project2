@@ -50,7 +50,7 @@
 
   public static function load_record( $record ) {
     $session = new Session();
-    $session->set_all( $record['id'], $record[ "psid" ], $record[ "timestamp" ] );
+    $session->set_all( $record['id'], $record[ "psid" ], $record[ "dashed_timestamp" ] );
     return $session;
   }
 

@@ -24,6 +24,7 @@
           <th>PeopleSoft #</th>
           <th>Student ID</th>
           <th>Grade</th>
+          <th></th>
         </thead>
         <?php 
           $user_courses = $course->user_courses();
@@ -40,6 +41,13 @@
               <td>(user not in system)</td>
             <?php endif; ?>
             <td><?php echo $user_course->grade ?></td>
+            <td class="text-right">
+              <?php if ( $user ): ?>
+                <a href="student.php?user_id=<?php echo $user->get_user_id() ?>">
+                  <i class="icon-eye-open"></i>&nbsp;View student
+                </a>
+              <?php endif; ?>
+            </td>
           </tr>
         <?php endforeach; ?>
       </table>

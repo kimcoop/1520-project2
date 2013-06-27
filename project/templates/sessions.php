@@ -2,9 +2,9 @@
 
 <table class="table table-hover">
   <?php
-    $sessions = Session::find_all_by_psid( $_SESSION['viewing_psid'] );
-    if ( count($sessions) > 0 ) {
-      foreach( $sessions as $index => $session ) {
+    $sessions = Session::find_all_by_psid( $student->get_psid() );
+    if ( count($sessions) > 0 ):
+      foreach( $sessions as $index => $session ):
       ?>
       
         <tr>
@@ -13,12 +13,12 @@
         </tr>
 
       <?php
-      } // foreach
-    } else {
+      endforeach;
+    else:
   ?>
 
     No advising sessions found.
 
-  <?php } ?>
+  <?php endif; ?>
 
 </table>

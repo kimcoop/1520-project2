@@ -4,13 +4,11 @@
 
   if ( is_logged_in() && is_advisor() ):
     clear_browsing_session(); // clear out old search session (student or course)
-    echo 'cleared!<br>****';
-
 
 ?>
 
   <div class="row">
-    <div class="main-content span9">
+    <div class="main-content span10">
       
       <div class="hgroup">
         <h2>
@@ -23,26 +21,30 @@
       <p>Welcome to your advisor dashboard. Use the inputs below to look up a student or course.</p>
 
       <div class="row row-search">
-        <div class="span4 search-student">
+        <div class="span4 search-student well well-padded">
           <h3>Search for a Student</h3>
           <form action="routes.php" method="get" name="search_student_form">
             <input class="input-block-level" autofocus placeholder="<PeopleSoft #> or <FirstName LastName>" type="text" name="student_search_term">
-            <button type="submit" class="btn search-button" name="search_student_form_submit">
+            <br>
+            <button type="submit" class="btn-primary btn" name="search_student_form_submit">
               <i class="icon-search"></i>&nbsp;
               Search students
             </button>
+            <br>
           </form>
         </div><!-- .search-student -->
 
-        <div class="span5 search-course">
+        <div class="span5 search-course well well-padded">
           <h3>Search for a Course</h3>
           <form action="routes.php" method="get" name="search_course_form">
             <input placeholder="Department" type="text" name="department">
             <input placeholder="Course number" type="text" name="course_number">
-            <button type="submit" class="btn search-button" name="search_course_form_submit">
+            <br>
+            <button type="submit" class="btn-primary btn" name="search_course_form_submit">
               <i class="icon-search"></i>&nbsp;
               Search courses
             </button>
+            <br>
           </form>
         </div><!-- .search-course -->
       

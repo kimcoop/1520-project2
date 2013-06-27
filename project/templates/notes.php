@@ -4,7 +4,7 @@
 
   <?php
     
-    $notes = Note::find_all_by_psid( $_SESSION['viewing_psid'] );
+    $notes = Note::find_all_by_psid( $student->get_psid() );
 
     if ( count($notes) > 0 ) {
 
@@ -24,7 +24,9 @@
             ?>
 
             <form class="pull-right" action="routes.php" method="post" name="display_notes_form">
-              <button value="<?php echo $note->id; ?>" class="btn" type="submit" name="display_notes_form_submit">View &raquo;</button>
+              <button value="<?php echo $note->id; ?>" class="btn" type="submit" name="display_notes_form_submit">
+                <i class="icon-eye-open"></i>&nbsp;View Note
+              </button>
             </form>
 
             <?php

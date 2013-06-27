@@ -24,8 +24,10 @@
 
     public function get_contents() {
       $filename = sprintf( "files/notes/%d:%s.txt", $this->psid, $this->dashed_timestamp );
-      $notes = file_get_contents( $filename );
-      return $notes;
+      if ( file_exists($filename) )
+        return file_get_contents( $filename );
+      else
+        return "file not found";
     }
   
     public function should_show() {

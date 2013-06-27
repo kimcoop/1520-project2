@@ -24,8 +24,9 @@ function was_posted( $name ) {
 
 function clear_browsing_session() {
   unset( $_SESSION['viewing_psid'] );
+  unset( $_SESSION['viewing_user_id'] );
   unset( $_SESSION['should_show_notes'] );
-  current_user()->is_logging_session( false );
+  current_user()->set_is_logging_session( FALSE );
 }
 
 function current_user() {
@@ -47,6 +48,13 @@ function is_advisor() { // Admins have advisor privileges and more
 function is_admin() {
   return current_user()->is_admin();
 }
+
+// function current_student() {
+//   if ( is_viewing_student() )
+//     return $_GET['user_id'];
+//   else
+//     return current_user()->get_user_id(); // student viewing his own profile
+// }
 
 function is_viewing_student() {
  return isset( $_GET['user_id'] ); 
@@ -74,15 +82,6 @@ function sort_by_term( $a, $b ) {
   else
     return ( $a->term < $b->term ? -1 : 1 );
 }
-
-
-function sort_by_department( $a, $b ) {
-  if ( $a->department == $b->department )
-    return 0;
-  else
-    return ( $a->department < $b->department ? -1 : 1 );
-}
-
 
 
   /* 
@@ -125,8 +124,8 @@ function sort_by_department( $a, $b ) {
   */
 
   function set_viewing_student( $student_user ) {
-    $_SESSION['student'] = $student_user;
     $_SESSION['viewing_psid'] = $student_user->get_psid();
+    $_SESSION['viewing_user_id'] = $student_user->get_user_id();
   }
 
 

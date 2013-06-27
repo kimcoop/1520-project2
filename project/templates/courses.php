@@ -4,7 +4,7 @@
     <table class="table table-hover">
       <?php
 
-        $courses_per_term = UserCourse::find_by( 'term', $_SESSION['viewing_psid'] );
+        $courses_per_term = UserCourse::find_by( 'term', $student->get_psid() );
 
         if ( !empty($courses_per_term) ) {
           ksort( $courses_per_term );
@@ -12,7 +12,7 @@
           ?>
             <tr>
               <td><?php echo $term; ?></td>
-              <td><?php foreach( $courses as $course ) echo "$course" ?></td>
+              <td><?php foreach( $courses as $course ) echo "$course<br>" ?></td>
             </tr>
           <?php
             } // foreach $courses_per_term
@@ -31,20 +31,19 @@
     <h3>Courses taken by department</h3>
      <table class="table table-hover">
       <?php
-        $courses_by_department = UserCourse::find_by( 'department', $_SESSION['viewing_psid'] );
+        $courses_by_department = UserCourse::find_by( 'department', $student->get_psid() );
 
-        if ( !empty($courses_by_department) ) {
-          ksort( $courses_by_department ); // TODO - this may be tricky
-          foreach( $courses_by_department as $department => $courses ) { ?>
+        if ( !empty($courses_by_department) ):
+          foreach( $courses_by_department as $department => $courses ): ?>
             <tr>
               <td><?php echo $department; ?></td>
-              <td><?php foreach( $courses as $course ) echo "$course" ?></td>
+              <td><?php foreach( $courses as $course ) echo "$course<br>" ?></td>
             </tr>
-          <?php
-          } // foreach $courses_by_department
-        } else {
+        <?php
+          endforeach;
+        else:
           echo "No courses taken.";
-        }
+        endif;
       ?>
     </table>
   </div>
@@ -67,7 +66,7 @@
           <tr>  
             <td><?php echo $req->title; ?></td>
             <td>
-              <?php if ( $course = $req->get_satisfying_course( $_SESSION['viewing_psid'] ) ) { ?>
+              <?php if ( $course = $req->get_satisfying_course( $student->get_psid() ) ) { ?>
                 <span class='text-success'>S</span>
               <?php
                 } else { 

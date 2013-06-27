@@ -88,8 +88,7 @@
     }
 
     public static function find_all_by_psid( $psid ) {
-      $all = parent::where_many( 'user_courses', "psid='$psid'" );
-      return $all;
+      return parent::where_many( 'user_courses', "psid='$psid'" );
     }
 
     public static function find_by( $grouping, $psid ) {

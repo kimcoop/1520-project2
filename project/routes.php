@@ -145,12 +145,13 @@
 
   if ( was_posted('log_advising_session_form_submit') ) {
     if ( Session::log_advising_session( $_SESSION['viewing_psid'] )) {
-      current_user()->is_logging_session( true );
+      current_user()->set_is_logging_session( TRUE );
       display_notice( 'Advising session logged.', 'success' );
     } else {
       display_notice( 'Error logging advising session.', 'error' );
     }
-    header('Location: advisor.php');
+    $user_id = $_SESSION['viewing_user_id'];
+    header( "Location: student.php?user_id=$user_id" );
     exit();
   }
 
@@ -159,13 +160,15 @@
       display_notice( 'Note saved.', 'success' );
     else
       display_notice( 'Error saving note.', 'error' );
-    header('Location: advisor.php?tab=advising_notes') ;
+    $user_id = $_SESSION['viewing_user_id'];
+    header( "Location: student.php?tab=advising_notes&user_id=$user_id" );
     exit();
   }
 
   if ( was_posted('display_notes_form_submit') ) {
     Note::set_should_show_notes( $_POST['display_notes_form_submit'], true );
-    header('Location: advisor.php?tab=advising_notes');
+    $user_id = $_SESSION['viewing_user_id'];
+    header( "Location: student.php?tab=advising_notes&user_id=$user_id" );
     exit();
   }
 
@@ -173,13 +176,13 @@
     session_destroy();
     header('Location: index.php') ;
     exit();
-    
+
   } elseif ( isset($_GET['student_search_term']) ) {
     $search_term = $_GET['student_search_term'];
     if ( $user = User::find_user_by_psid_or_name( $search_term )) {
       $user_id = $user->get_user_id();
+      set_viewing_student( $user ); // store to session
       header( "Location: student.php?user_id=$user_id" );
-      // set_viewing_student( $user );
       // display_notice( "Viewing report for " . $user->get_full_name(), 'success' );
     } else {
       $search = $_GET['student_search_term'];
@@ -188,8 +191,15 @@
     }
     exit();
 
+  } elseif ( $_GET['action'] == 'end_session_log' ) {
+    current_user()->set_is_logging_session( FALSE ); // hacky, but works for our purposes
+    display_notice( 'Advising session ended.', 'success' );
+    $user_id = $_SESSION['viewing_user_id'];
+    header( "Location: student.php?user_id=$user_id" );
+    exit();
+
   } elseif ( isset($_GET['search_course_form_submit']) ) {
-    $department = $_GET['department'];
+    $department = strtoupper( $_GET['department'] );
     $course_number = $_GET['course_number'];
     if ( $course = Course::find_by_department_and_course_number($department, $course_number) ) {
       $course_id = $course->id;

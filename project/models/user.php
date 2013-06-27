@@ -6,7 +6,8 @@
       $ADVISOR_ACCESS_LEVEL = 1,
       $ADMIN_ACCESS_LEVEL = 2;
 
-    public $is_logging_session = FALSE;
+    public $is_logging_session = FALSE; // (advisor only)
+    public $courses; // (student only)
 
     private $access_level, 
       $email, 
@@ -22,11 +23,34 @@
       parent::__construct();
     }
 
-    function is_logging_session( $value=NULL ) {
-      if ( !$value )
-        return $this->is_logging_session;
-      else
-        $this->is_logging_session = $value;
+    public function courses() {
+      if ( !$this->courses )
+        $this->courses = UserCourse::find_all_by_psid( $this->get_psid() );
+      return $this->courses;
+    }
+
+    public function total_courses_taken() {
+      return count( $this->courses() );
+    }
+
+    public function get_gpa() {
+      $total_points = 0;
+      $user_courses = $this->courses();
+      $total_user_courses = count( $user_courses );
+      if ( $total_user_courses == 0 ) return "--";
+
+      foreach( $user_courses as $user_course )
+        $total_points += parent::grade_points( $user_course->grade );
+
+      return round($total_points / $total_user_courses, 2);
+    }
+
+    function is_logging_session() {
+      return $this->is_logging_session;
+    }
+
+    function set_is_logging_session( $is_logging_session ) {
+      $this->is_logging_session = $is_logging_session;
     }
 
     public function change_password( $old_password, $new_password, $new_password_confirm ) {

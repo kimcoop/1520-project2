@@ -5,10 +5,9 @@ html, body {
 body {
   padding-top: 0;
   padding-bottom: 0;
-  color: #555;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", 
-  Helvetica, Arial, "Lucida Grande", sans-serif;
-  font-family: arial;
+  color: #333;
+  font-family: Arial, "Lucida Grande", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
@@ -76,9 +75,17 @@ h4 {
   font-weight: 500;
 }
 
-a {
+.btn, a.btn, a {
   color: #999999;
   font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.15em;
+}
+
+a.btn {
+  color: inherit;
+  font-weight: normal;
 }
 
 .title a {
@@ -123,15 +130,15 @@ header {
   padding-top: 1em;
 }
 
+.main .nav>li>a:hover, .main .nav>li>a:focus {
+  text-decoration: none;
+  background-color: #fff;
+  color: inherit;
+}
 .nav>li>a:hover, .nav>li>a:focus, footer a:hover, footer a:focus {
   text-decoration: none;
   background-color: inherit;
-  color: #efefef;
-}
-.main .nav>li>a:hover, .main .nav>li>a:focus, footer a:hover, footer a:focus {
-  text-decoration: none;
-  background-color: #efefef;
-  color: inherit;
+  color: #fff;
 }
 
 footer {
@@ -145,7 +152,6 @@ footer, .push {
   height: 4em;
 }
 
-
 .well {
   box-shadow: none;
   -webkit-box-shadow: none;
@@ -154,6 +160,10 @@ footer, .push {
   background: #efefef;
   overflow: hidden;
   word-wrap: break-word;
+}
+
+.well.well-padded {
+  padding-bottom: 30px;
 }
 
 .well.outlined {
@@ -186,28 +196,35 @@ aside .btn {
 
 .btn {
   display: inline-block;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
   position: relative;
   cursor: pointer;
-  font-size: 13px;
   line-height: 1;
-  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.1);
   background-color: #eee;
-  font-size: 14px;
-  padding: 8px 14px 9px;
+  padding: 10px 15px;
   background-image: none;
   background-origin: padding-box;
   background-size: auto;
-  text-shadow: none;
+  font-weight: normal;
+  border: 1px solid #999;
+  border: 0 rgba(0,0,0,0);
+  background-color: #E6E6E6;
+  text-decoration: none;
+  -webkit-transition: .2s linear all;
+  -moz-transition: .2s linear all;
+  -ms-transition: .2s linear all;
+  -o-transition: .2s linear all;
+  transition: .2s linear all;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
-a.btn {
-  font-weight: normal;
+.btn:hover {
+  background: #ddd;
 }
 
 .btn-primary {
@@ -224,9 +241,12 @@ a.btn {
   background-color: #C7D9DE;
 }
 
-
 .info p {
   font-size: 1.3em;
+}
+
+.text-right {
+  text-align: right !important;
 }
 
 @media (max-width: 767px) {
