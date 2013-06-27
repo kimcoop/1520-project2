@@ -16,6 +16,7 @@ date_default_timezone_set( 'America/New_York' );
 
 define( "STUDENT_ACCESS_LEVEL", 0 );
 define( "ADVISOR_ACCESS_LEVEL", 1 );
+define( "ADMIN_ACCESS_LEVEL", 2 );
 
 define( "MAILER_SUBJECT", "Your AdvisorCloud Credentials" );
 define( "MAILER_SENDER", "kac162@pitt.edu" );
@@ -38,11 +39,15 @@ function is_logged_in() {
 }
 
 function is_student() {
-  return current_user()->get_access_level() == STUDENT_ACCESS_LEVEL;
+  return current_user()->is_student();
 }
 
-function is_advisor() {
-  return current_user()->get_access_level() == ADVISOR_ACCESS_LEVEL;
+function is_advisor() { // Admins have advisor privileges and more
+  return current_user()->is_advisor() || current_user()->is_admin();
+}
+
+function is_admin() {
+  return current_user()->is_admin();
 }
 
 function is_viewing_student() {

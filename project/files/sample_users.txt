@@ -1,3 +1,4 @@
+admin:admin:454545:kac162@pitt.edu:Adminifer:Captain:2
 advisor:advisor:1234567:kac162@pitt.edu:Advisorson:Addy:1
 student:student:18888888:kac162@pitt.edu:Studenty:Stu:0
 Swordsman:IAmNotLeftHanded:1234567:kac162@pitt.edu:Montoya:Inigo:0

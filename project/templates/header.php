@@ -36,6 +36,14 @@
                 Welcome, <?php echo current_user()->get_first_name(); ?>
               </a>
             </li>
+            <?php if (current_user()->is_admin()) : ?>
+            <li>
+              <a href="admin.php">
+                <i class="icon icon-key"></i>&nbsp;
+                Admin
+              </a>
+            </li>  
+            <?php endif; ?>
             <li>
               <a href="settings.php">
                 <i class="icon icon-cog"></i>&nbsp;

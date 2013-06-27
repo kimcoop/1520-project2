@@ -2,6 +2,10 @@
 
   class User extends Model {
 
+    public $STUDENT_ACCESS_LEVEL = 0, 
+      $ADVISOR_ACCESS_LEVEL = 1,
+      $ADMIN_ACCESS_LEVEL = 2;
+
     private $access_level, 
       $email, 
       $first_name, 
@@ -50,6 +54,32 @@
 
     public function get( $property ) {
       return $this->$property;
+    }
+
+
+    public function is_student() {
+      return $this->get_access_level() == $this->STUDENT_ACCESS_LEVEL;
+    }
+
+    public function is_advisor() {
+      // Admins selfdvisor privileges and more
+      return $this->get_access_level() == $this->ADVISOR_ACCESS_LEVEL || $this->get_access_level() == $this->ADMIN_ACCESS_LEVEL;
+    }
+
+    public function is_admin() {
+      return $this->get_access_level() == $this->ADMIN_ACCESS_LEVEL;
+    }
+
+
+    public function get_role() {
+      switch ( $this->get_access_level() ) {
+        case 0:
+          return "Student";
+        case 1:
+          return "Advisor";
+        default:
+          return "Admin";
+      }
     }
 
     public function get_user_id() {
@@ -112,6 +142,22 @@
     * CLASS METHODS
     *
     */
+
+    public static function create( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id ) {
+      $user = new User();
+      $user->set_all( 
+        addslashes( $access_level ),
+        addslashes( $email ),
+        addslashes( $first_name ),
+        addslashes( $last_name ),
+        addslashes( $password ),
+        addslashes( $psid ),
+        addslashes( $user_id )
+      );
+      return DB::insert( 'users', $user );
+    }
+    
+
 
     public static function load_record( $record ) {
       $user = new User();
@@ -177,6 +223,10 @@
         return $password == $user->get_password();
     }
 
+    public static function find_all() {
+      return parent::find_all( 'users' );
+    }
+
     public static function find_by_user_id( $user_id ) {
       return parent::where_one( 'users', "user_id='$user_id'" );
     }
@@ -200,6 +250,9 @@
       return $user;
     }
 
+    public static function delete_by_psid( $psid ) {
+      return parent::delete_where( 'users', "psid='$psid'" );
+    }
 
     public static function send_password( $user_id ) {
       // $this->set_password( "reset" ); // TODO: will be hashed and saved

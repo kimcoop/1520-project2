@@ -26,7 +26,6 @@
       return $date->format('Y-m-d-H-i-s');
     }
 
-
     public static function update( $table, $entity, $updates ) {
       $pk = self::pk_for_table( $table );
       $where = "$pk='" . $entity->get( $pk ) . "'";
@@ -90,9 +89,11 @@
 
     public static function find_all( $table ) {
       $klass = self::class_for_table( $table );
-      $collection = DB::select_all( $table, $klass );
-      // TODO - parse to object format
-      return $collection;
+      return DB::select_all( $table, $klass );
+    }
+
+    public static function delete_where( $table, $conditions ) {
+      return DB::delete_where( $table, $conditions );
     }
 
   }

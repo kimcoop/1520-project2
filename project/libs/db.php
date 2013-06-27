@@ -33,14 +33,16 @@
       $sql = "INSERT IGNORE INTO $table( $keys ) VALUES( $values )";
       $result = self::run( $sql );
       
-      if ( $result ) 
+      if ( $result && $table != 'users' ) // users PK is not auto-increment, so insert_id fails
         return self::$db->insert_id; // return ID of this (last) insertion
+      elseif ( $result && $table == 'users' )
+        return true;
       else 
         return NULL;
     }
 
-    public function update( $table, $updates, $where ) {
-      $sql = "UPDATE $table SET $updates WHERE $where";
+    public function update( $table, $updates, $conditions ) {
+      $sql = "UPDATE $table SET $updates WHERE $conditions";
       return self::run( $sql );
     }
 
@@ -74,6 +76,11 @@
       $result->free();
       return $return_object;
 
+    }
+
+    public function delete_where( $table, $conditions ) {
+      $sql = "DELETE FROM $table WHERE $conditions";
+      return self::run( $sql );
     }
 
     public function parse_array_to_objects( $result, $klass ) {
