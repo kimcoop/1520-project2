@@ -25,12 +25,13 @@
 
       <br>
       <div class="row row-search">
-        <div class="span4 search-student well well-padded">
+        <div class="span5 search-student well well-padded text-center">
+          <h3><i class="icon-2x icon-user"></i></h3>
           <h3>Search for a Student</h3>
           <form action="routes.php" method="get" name="search_student_form">
             <input class="input-block-level" autofocus placeholder="<PeopleSoft #> or <FirstName LastName>" type="text" name="student_search_term">
-            <br>
-            <button type="submit" class="btn-primary btn" name="search_student_form_submit">
+            
+            <button type="submit" class="btn-block btn-primary btn" name="search_student_form_submit">
               <i class="icon-search"></i>&nbsp;
               Search students
             </button>
@@ -38,13 +39,14 @@
           </form>
         </div><!-- .search-student -->
 
-        <div class="span5 search-course well well-padded">
+        <div class="span5 search-course well well-padded text-center">
+          <h3><i class="icon-2x icon-pencil"></i></h3>
           <h3>Search for a Course</h3>
           <form action="routes.php" method="get" name="search_course_form">
-            <input placeholder="Department" type="text" name="department">
+            <input class="input-small" placeholder="Department" type="text" name="department">
             <input placeholder="Course number" type="text" name="course_number">
-            <br>
-            <button type="submit" class="btn-primary btn" name="search_course_form_submit">
+            
+            <button type="submit" class="btn-block btn-primary btn" name="search_course_form_submit">
               <i class="icon-search"></i>&nbsp;
               Search courses
             </button>

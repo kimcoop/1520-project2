@@ -5,8 +5,8 @@ html, body {
 body {
   padding-top: 0;
   padding-bottom: 0;
-  color: #333;
-  font-family: Arial, "Lucida Grande", sans-serif;
+  color: #777;
+  font-family: 'Droid Sans', Arial, "Lucida Grande", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -67,7 +67,6 @@ h1,h2,h3 {
   font-weight: lighter;
   /*text-shadow: 1px 1px 0px #efefef;*/
   color: #007d9a;
-  font-family: georgia;
   letter-spacing: -1px;
 }
 
@@ -160,10 +159,13 @@ footer, .push {
   background: #efefef;
   overflow: hidden;
   word-wrap: break-word;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
 .well.well-padded {
-  padding-bottom: 30px;
+  padding-bottom: 50px;
 }
 
 .well.outlined {
