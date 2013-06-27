@@ -21,6 +21,11 @@ define( "ADMIN_ACCESS_LEVEL", 2 );
 define( "MAILER_SUBJECT", "Your AdvisorCloud Credentials" );
 define( "MAILER_SENDER", "kac162@pitt.edu" );
 
+
+function was_posted( $name ) {
+  return isset( $_POST[$name] );
+}
+
 function clear_search() {
   $name = $_SESSION['student']->get_full_name();
   unset( $_SESSION['student'] );

@@ -44,7 +44,8 @@
     public function set_secret_question( $question, $answer ) {
       // TODO: sanitize
       $this->secret_question = $question;
-      $this->secret_answer = $answer;
+      $this->secret_answer = hash( 'sha256', $answer );
+
       return User::update( 'users', $this, "secret_question='$question', secret_answer='$answer'" );
     }
 
@@ -136,6 +137,16 @@
       return "$this->psid, $this->access_level, $this->user_id, $this->email, $this->first_name, $this->last_name, $this->password, $this->secret_question, $this->secret_answer";
     }
 
+    public function get_reset_password() {
+      $new_pass = uniqid( $this->get_user_id() ); // to email user
+      $hash_new = hash( 'sha256', $new_pass ); // to store in DB
+
+      if ( User::update( 'users', $this, "password='$hash_new'" ) )
+        return $new_pass;
+      else
+        return NULL;
+    }
+
 
     /*
     *
@@ -200,13 +211,8 @@
         $_SESSION[ 'user' ] = $user;
         $_SESSION[ 'viewing_psid' ]= $user->get_psid();  // so we can use one variable for both roles. overwrite if/when advisor looks up student
         
-        // if ( is_student() )
-        //   echo "is student";
-        // else
-        //   echo "is advisor";
-          // $_SESSION['user_courses'] = Course::get_courses_for_user( $_SESSION['psid'], $_SESSION['all_courses'] );
-        // $expire = time() + 60 * 60 * 24 * 30;
-        // setcookie( "user_id", $user_id, $expire ); // set cookie to what user passed in
+        $expire = time() + 60 * 60 * 24 * 30;
+        setcookie( "user_id", $user_id, $expire ); // set cookie to what user passed in
 
         return $user;
       } else {
@@ -254,23 +260,29 @@
       return parent::delete_where( 'users', "psid='$psid'" );
     }
 
-    public static function send_password( $user_id ) {
-      // $this->set_password( "reset" ); // TODO: will be hashed and saved
+    public static function reset_and_send_password( $user_id ) {
       
-      $email = $this->email;
-      $password = $this->password;
-      $format = "Your password reset token is %s. Thanks! -- The Advisor Cloud Team";
+      $user = User::find_by_user_id( $user_id );
+
+      if ( !$user )
+        return FALSE;
+
+      $email = $user->get_email();
+      $new_password = $user->get_reset_password();
+
+      if ( !$new_password )
+        return FALSE;
+
+      $format = "Your password has been reset to %s. Thanks! -- The Advisor Cloud Team";
 
       $to      = $email;
       $subject = MAILER_SUBJECT;
-      $message = sprintf( $format, $password );
+      $message = sprintf( $format, $new_password );
       $headers = 'From: ' .MAILER_SENDER . '' . "\r\n" .
           'Reply-To: ' .MAILER_SENDER . '' . "\r\n" .
           'X-Mailer: PHP/' . phpversion();
 
-      mail( $to, $subject, $message, $headers );
-      return true;
-
+      return mail( $to, $subject, $message, $headers );
 
     }
 

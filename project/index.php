@@ -33,9 +33,9 @@
     <br>
     <br>
     <span class="pull-right">
-      <label class="checkbox">
-        <input type="checkbox" name="forgot_password"> Forgot password
-      </label>
+      <a href="forgot_password.php?step=user_id">
+        Forgot password
+      </a>
     </span>
     
   </form>
