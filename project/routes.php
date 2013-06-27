@@ -83,9 +83,9 @@
   if ( was_posted('add_user_form_submit')) {
     $full_name = $_POST['first_name'] . " " . $_POST['last_name'];
     if ( User::create( $_POST['access_level'], $_POST['email'], $_POST['first_name'], $_POST['last_name'], $_POST['password'], $_POST['psid'], $_POST['user_id'] ))
-      display_notice( "User $full_name created.", 'success' );
+      display_notice( "User <strong>$full_name</strong> created.", 'success' );
     else
-      display_notice( "Error creating user $full_name.", 'error' );
+      display_notice( "Error creating user <strong>$full_name.</strong>", 'error' );
     header( "Location: admin.php" );
     exit();
   }

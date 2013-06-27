@@ -13,13 +13,17 @@
       <div class="hgroup">
         <h2>
           <?php echo current_user()->get_first_name(); ?>'s 
-          <span class="light">Advisor Dashboard</span>
+          <span class="light"><?php echo current_user()->get_role() ?> Dashboard</span>
         </h2>
         <?php include('templates/notice.php') ?>
       </div><!-- .hgroup -->
 
-      <p>Welcome to your advisor dashboard. Use the inputs below to look up a student or course.</p>
+      <p>Welcome to your <?php echo current_user()->get_role() ?> dashboard! Use the inputs below to look up a student or course.</p>
 
+      <?php if ( current_user()->is_admin() )?>
+        <p>This is the <strong>Advisor</strong> view. Use the <strong>Admin</strong> tab in the nav bar to access additional functionality, such as adding and deleting users.</p>
+
+      <br>
       <div class="row row-search">
         <div class="span4 search-student well well-padded">
           <h3>Search for a Student</h3>

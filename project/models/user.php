@@ -188,12 +188,13 @@
 
     public static function create( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id ) {
       $user = new User();
+      $hashed_password = hash( 'sha256', $password );
       $user->set_all( 
         addslashes( $access_level ),
         addslashes( $email ),
         addslashes( $first_name ),
         addslashes( $last_name ),
-        addslashes( $password ),
+        addslashes( $hashed_password ),
         addslashes( $psid ),
         addslashes( $user_id )
       );
