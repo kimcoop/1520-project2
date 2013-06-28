@@ -22,6 +22,22 @@ function was_posted( $name ) {
   return isset( $_POST[$name] );
 }
 
+function get_current_url() {
+  return $_SERVER[ "REQUEST_URI" ];
+}
+
+function is_active_nav( $nav ) {
+  $url = explode( "/", get_current_url() );
+  $slug = array_pop( $url );
+  if ( "$nav.php" == $slug )
+    return true;
+  else {
+    if (( $slug == "advisor.php" || $slug == "student.php" ) && ( $nav == "home" ))
+      return true;
+  }
+  return false;
+}
+
 function clear_browsing_session() {
   unset( $_SESSION['viewing_psid'] );
   unset( $_SESSION['viewing_user_id'] );

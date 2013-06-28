@@ -144,6 +144,10 @@ header {
   background-color: inherit;
   color: #fff;
 }
+.nav-pills>.active>a, .nav-pills>.active>a:hover, .nav-pills>.active>a:focus {
+  color: #007d9a;
+  background: inherit;
+}
 
 footer {
   margin-top: 30px;
