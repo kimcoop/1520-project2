@@ -42,10 +42,10 @@
 
         <fieldset>
           <label>Secret question</label>
-          <input class="input-block-level" type="text" placeholder="Mother's maiden name..." name="secret_question" value="<?php echo current_user()->get_secret_question()?>">
+          <input class="input-block-level" type="text" placeholder="Mother's maiden name..." name="secret_question" value="<?php echo current_user()->get_secret_question() ?>">
 
           <label>Secret answer</label>
-          <input class="input-block-level" type="text" placeholder="Secret answer here" name="secret_answer" value="<?php echo current_user()->get_secret_answer()?>">
+          <input class="input-block-level" type="text" placeholder="Secret answer here" name="secret_answer">
           
           <br>
           <br>

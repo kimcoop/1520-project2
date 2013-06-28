@@ -29,20 +29,33 @@
     </form>
 
   <?php elseif ( $_GET['step'] == 'secret_question' ): ?>
+    <?php 
+      $user_id = $_GET['user_id'];
+      $user = User::find_by_user_id( $user_id );
+      $secret_question = $user->get_secret_question(); ?>
 
     <form class="form-signin" action="routes.php" name="forgot_password_step_2" method="post">
       <?php include('templates/notice.php') ?>
-      <h3>Step 2
-        <span class="muted">Answer your secret question to receive your password via email</span>
+
+      <input type="hidden" value="<?php echo $user_id ?>" name="user_id" />
+
+      <h3>Step 2.
+        <span class="muted">Answer your secret question</span>
       </h3>
 
-      <h3><?php echo $secret_question ?></h3>
+      <p>Answer the following question to receive your reset password via email.</p>
+
+      <h3>
+        <i class="icon icon-question-sign"></i>&nbsp;
+        <?php echo $secret_question ?>
+      </h3>
 
       <label>Secret answer</label>
       <input autofocus type="text" class="input-block-level" placeholder="Answer" name="secret_answer" />
 
       <br>
-      <button type="submit" class="btn pull-right btn-large btn-primary" name="forgot_password_step_2_submit">Send password</button>
+      <button type="submit" class="btn pull-right btn-large btn-primary" name="forgot_password_step_2_submit">Submit</button>
+      <a href="index.php" class="btn pull-right btn-large">Back</a>
       <br>
       <br>
     </form>

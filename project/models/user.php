@@ -75,7 +75,9 @@
     }
 
     public function set_secret_question( $question, $answer ) {
-      // TODO: sanitize
+
+      $question = addslashes( $question );
+      $answer = addslashes( $answer );
       $this->secret_question = $question;
       $this->secret_answer = hash( 'sha256', $answer );
 
@@ -155,7 +157,7 @@
       return $this->secret_answer;
     }
 
-    public function set_all( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id ) {
+    public function set_all( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id, $question, $answer ) {
       $this->access_level = $access_level;
       $this->email = $email;
       $this->first_name = $first_name;
@@ -163,6 +165,8 @@
       $this->password = $password;
       $this->psid = $psid;
       $this->user_id = $user_id;
+      $this->secret_question = $question;
+      $this->secret_answer = $answer;
     }
 
     public function __toString() {
@@ -212,7 +216,9 @@
         stripslashes(rtrim( $record[ "last_name" ])),
         stripslashes(rtrim( $record[ "password" ])),
         stripslashes(rtrim( $record[ "psid" ])),
-        stripslashes(rtrim( $record[ "user_id" ]))
+        stripslashes(rtrim( $record[ "user_id" ])),
+        stripslashes(rtrim( $record[ "secret_question" ])),
+        stripslashes(rtrim( $record[ "secret_answer" ]))
       );
       return $user;
     }
@@ -227,7 +233,9 @@
         rtrim( $pieces[4] ), // last_name
         rtrim( hash( 'sha256', $pieces[1] ) ), // password
         rtrim( $pieces[2] ), // psid
-        rtrim( $pieces[0] ) // user_id
+        rtrim( $pieces[0] ), // user_id
+        NULL, // users from file won't have secret question
+        NULL // users from file won't have secret answer
       );
       return $user;
     }

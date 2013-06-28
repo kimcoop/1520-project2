@@ -31,12 +31,11 @@
   if ( was_posted('forgot_password_step_1_submit') ) {
     if ( isset( $_POST['user_id'] ))
       $user_id = addslashes( $_POST['user_id'] );
-
     if ( $user_id ) {
       $user = User::find_by_user_id( $user_id );
       if ( $user ) {
         $secret_question = $user->get_secret_question();
-        $location = "forgot_password.php?step=secret_question";
+        $location = "forgot_password.php?user_id=$user_id&step=secret_question";
 
         if ( !$secret_question ) { // if no secret question was provided, send user through
           User::reset_and_send_password( $user_id );
@@ -62,19 +61,24 @@
     if ( $answer ) {
       $user_id = $_POST['user_id'];
       $user = User::find_by_user_id( $user_id );
-      if ( $user->get_secet_answer() == hash( 'sha256', $answer ) ) {
-        User::reset_and_send_password( $user_id );
+      if ( $user ) {
+        if ( $user->get_secret_answer() == hash( 'sha256', $answer ) ) {
+          User::reset_and_send_password( $user_id );
+          $location = "forgot_password.php?step=emailed";
+        } else {
+          display_notice( "Incorrect secret answer. Please try again.", 'error' );
+          $user_id = $_POST['user_id'];
+          $location = "forgot_password.php?user_id=$user_id&step=secret_question";
+        }
       } else {
-        display_notice( "Please provide your secret answer.", 'error' );
+        display_notice( "User ID not recognized.", 'error' );
       }
-      
-    } else {
-      display_notice( "Please provide your secret answer.", 'error' );
-      $location = "forgot_password.php?step=secret-question";
     }
 
-    if ( !$location )
-      $location = "forgot_password.php?step=emailed";
+    if ( !$location ) {
+      $user_id = $_POST['user_id'];
+      $location = "forgot_password.php?user_id=$user_id&step=secret_question";
+    }
     header( "Location: $location" );
     exit();
 

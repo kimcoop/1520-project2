@@ -86,6 +86,7 @@
     $notes_sql = "CREATE TABLE notes(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       psid varchar(255) NOT NULL,
+      author_id varchar(255),
       dashed_timestamp varchar(255) NOT NULL,
       UNIQUE INDEX psid_timestamp( psid, dashed_timestamp )
       )";
@@ -93,6 +94,7 @@
     $sessions_sql = "CREATE TABLE sessions(
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       psid varchar(255) NOT NULL,
+      author_id varchar(255),
       dashed_timestamp varchar(255) NOT NULL,
       UNIQUE INDEX psid_timestamp( psid, dashed_timestamp )
       )";

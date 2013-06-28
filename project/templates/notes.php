@@ -12,8 +12,9 @@
         ?>
 
         <tr>
-          <td>Note <?php echo $index + 1 ?></td>
+          <td class="muted"><?php echo $index + 1 ?></td>
           <td><?php echo $note; ?></td>
+          <td><?php echo $note->get_author()->get_full_name() ?></td>
           <td>
             <?php
 

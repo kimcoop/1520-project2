@@ -8,8 +8,9 @@
       ?>
       
         <tr>
-          <td>Session <?php echo $index + 1 ?></td>
+          <td class="muted"><?php echo $index + 1 ?></td>
           <td><?php echo $session ?></td>
+          <td><?php echo $session->get_author()->get_full_name() ?></td>
         </tr>
 
       <?php

@@ -1,25 +1,25 @@
 <?php
 
   class Note extends Model {
-    public $id, $psid, $dashed_timestamp;
+    public $id, $psid, $dashed_timestamp, $author_id;
 
     public function __construct() {
       parent::__construct();
     }
 
-    public function set_all( $id, $psid, $timestamp ) {
+    public function set_all( $id, $psid, $timestamp, $author_id ) {
       $this->id = $id;
       $this->psid = $psid;
       $this->dashed_timestamp = $timestamp;
+      $this->author_id = $author_id;
     }
 
     public function get_values() {
-      return array( $this->psid, $this->dashed_timestamp );
+      return array( $this->psid, $this->dashed_timestamp, $this->author_id );
     }
 
     public function __toString() {
-      $date = parent::make_date( $this->dashed_timestamp );
-      return "" . $date;
+      return parent::make_date( $this->dashed_timestamp );
     }
 
     public function get_contents() {
@@ -37,6 +37,14 @@
         return $_SESSION['should_show_notes'][ $this->id ];
     }
 
+    public function get_author() {
+      $author = User::find_by_user_id( $this->author_id );
+      if ( $author )
+        return $author;
+      else
+        return "(author not found)";
+    }
+
   /*
   *
   * CLASS METHODS
@@ -47,7 +55,8 @@
     $dashed_timestamp = parent::get_dashed_timestamp();
     $note_timestamp = sprintf( "%d:%s", $psid, $dashed_timestamp );
     $note = new Note();
-    $note->set_all( -1, $psid, $dashed_timestamp );
+    $author_id = current_user()->get_user_id();
+    $note->set_all( -1, $psid, $dashed_timestamp, $author_id );
 
     $filename = sprintf( "files/notes/%s.txt", $note_timestamp );
     $append_success = file_put_contents( $filename, $contents, FILE_APPEND | LOCK_EX );
@@ -57,15 +66,15 @@
     
     return $append_success && $db_success;
   }
-
+ 
   public static function get_properties() {
-    return "psid, dashed_timestamp";
+    return "psid, dashed_timestamp, author_id";
   }
 
   public static function load_from_file( $line ) {
     $pieces = explode( ":", $line );
     $note = new Note();
-    $note->set_all( -1, $pieces[0], $pieces[1] ); // new entities have no ID
+    $note->set_all( -1, $pieces[0], $pieces[1], -1 ); // new entities have no ID or author_id
     return $note;
   }
 
@@ -76,7 +85,7 @@
 
   public static function load_record( $record ) {
     $note = new Note();
-    $note->set_all( $record['id'], $record[ "psid" ], $record[ "dashed_timestamp" ] );
+    $note->set_all( $record['id'], $record[ "psid" ], $record[ "dashed_timestamp" ], $record['author_id'] );
     return $note;
   }
 
