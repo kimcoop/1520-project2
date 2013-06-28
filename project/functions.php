@@ -1,10 +1,14 @@
 <?php
 
 session_start();
-include 'models/user_course.php';
-include 'models/requirement_course.php';
 
 function __autoload($class) {
+  $class = strtolower($class);
+  if ( $class == 'usercourse' ) 
+    $class = 'user_course';
+  elseif ( $class == 'requirementcourse' ) 
+    $class = 'requirement_course';
+  
   $file = 'models/' . $class . '.php';
   if ( file_exists( $file ))
     include $file;

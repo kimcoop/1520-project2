@@ -18,38 +18,42 @@
       </div><!-- .hgroup -->
 
       <table class="table table-hover">
-        <thead>
-          <th></th>
-          <th>Term</th>
-          <th>PeopleSoft #</th>
-          <th>Student ID</th>
-          <th>Grade</th>
-          <th></th>
-        </thead>
         <?php 
           $user_courses = $course->user_courses();
-          usort( $user_courses, 'sort_by_term' );
-          foreach( $user_courses as $index => $user_course ): 
-        ?>
-          <tr>
-            <td class="muted"><?php echo $index ?></td>
-            <td><?php echo $user_course->term ?></td>
-            <td><?php echo $user_course->psid ?></td>
-            <?php if ( $user = $user_course->user() ): ?> 
-              <td><?php echo $user->get_user_id() ?></td>
-            <?php else: ?>
-              <td>(user not in system)</td>
-            <?php endif; ?>
-            <td><?php echo $user_course->grade ?></td>
-            <td class="text-right">
-              <?php if ( $user ): ?>
-                <a href="student.php?user_id=<?php echo $user->get_user_id() ?>">
-                  <i class="icon-eye-open"></i>&nbsp;View student
-                </a>
+          if ( $user_courses ): ?>
+            <thead>
+              <th></th>
+              <th>Term</th>
+              <th>PeopleSoft #</th>
+              <th>Student ID</th>
+              <th>Grade</th>
+              <th></th>
+            </thead>
+          <?php usort( $user_courses, 'sort_by_term' );
+            foreach( $user_courses as $index => $user_course ): 
+          ?>
+            <tr>
+              <td class="muted"><?php echo $index ?></td>
+              <td><?php echo $user_course->term ?></td>
+              <td><?php echo $user_course->psid ?></td>
+              <?php if ( $user = $user_course->user() ): ?> 
+                <td><?php echo $user->get_user_id() ?></td>
+              <?php else: ?>
+                <td>(user not in system)</td>
               <?php endif; ?>
-            </td>
-          </tr>
-        <?php endforeach; ?>
+              <td><?php echo $user_course->grade ?></td>
+              <td class="text-right">
+                <?php if ( $user ): ?>
+                  <a href="student.php?user_id=<?php echo $user->get_user_id() ?>">
+                    <i class="icon-eye-open"></i>&nbsp;View student
+                  </a>
+                <?php endif; ?>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p>No student records found.</p>
+        <?php endif; ?>
       </table>
 
     </div><!-- .main-content-->

@@ -53,7 +53,7 @@
 
   <?php
 
-    require( 'project/libs/seeds.php' );
+    require( 'libs/seeds.php' );
 
   ?>
 

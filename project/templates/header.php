@@ -8,7 +8,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Advisor Cloud</title>
+    <title>Advisor Cloud 2.0</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -59,7 +59,7 @@
           </ul>
           <h3 class="title muted">
             <a href="<?php echo get_root_url(); ?>">
-            Advisor Cloud
+            Advisor Cloud 2.0
             </a>
           </h3>
         </div><!-- .container -->

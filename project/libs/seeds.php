@@ -1,23 +1,24 @@
 <?php
 
-  include( 'project/libs/db.php' );
-  include( 'project/libs/storable_interface.php' );
-  include( 'project/libs/model.php' );
+  include( 'libs/db.php' );
+  include( 'libs/storable_interface.php' );
+  include( 'libs/model.php' );
 
-  include( 'project/models/user.php' );
-  include( 'project/models/course.php' );
-  include( 'project/models/note.php' );
-  include( 'project/models/session.php' );
-  include( 'project/models/requirement.php' );
-  include( 'project/models/requirement_course.php' );
-  include( 'project/models/user_course.php' );
+  include( 'models/user.php' );
+  include( 'models/course.php' );
+  include( 'models/note.php' );
+  include( 'models/session.php' );
+  include( 'models/requirement.php' );
+  include( 'models/requirement_course.php' );
+  include( 'models/user_course.php' );
   
-  define( "SAMPLE_FILE_ROOT", 'project/files/sample_' );
+  define( "SAMPLE_FILE_ROOT", 'files/sample_' );
   define( "NO_INSERTION", FALSE );
 
   function clean() {
     echo "Cleaning out notes directory...<br/>";
-    $notes = glob( 'project/files/notes/*' ); // get all file names
+    $notes = glob( 'files/notes/*' ); // get all file names
+    if ( !$notes ) return;
     foreach( $notes as $note ){ // iterate files
       if ( is_file( $note ) )
         unlink( $note ); // delete file
