@@ -148,8 +148,9 @@
   }
 
   if ( was_posted('log_advising_session_form_submit') ) {
-    if ( Session::log_advising_session( $_SESSION['viewing_psid'] )) {
+    if ( $session_id = Session::log_advising_session( $_SESSION['viewing_psid'] )) {
       current_user()->set_is_logging_session( TRUE );
+      current_user()->set_logging_session_id( $session_id );
       display_notice( 'Logging current advising session.', 'success' );
     } else {
       display_notice( 'Error logging advising session.', 'error' );
@@ -160,7 +161,7 @@
   }
 
   if ( was_posted('advising_notes_form_submit') ) {
-    if ( Note::add_note( $_SESSION['viewing_psid'], $_POST['note_content'] )) 
+    if ( Note::add_note( $_SESSION['viewing_psid'], $_POST['note_content'], $_POST['session_id'] )) 
       display_notice( 'Note saved.', 'success' );
     else
       display_notice( 'Error saving note.', 'error' );
@@ -183,11 +184,10 @@
 
   } elseif ( isset($_GET['student_search_term']) ) {
     $search_term = $_GET['student_search_term'];
-    if ( $user = User::find_user_by_psid_or_name( $search_term )) {
+    if ( $user = User::find_by_psid_or_name( $search_term )) {
       $user_id = $user->get_user_id();
       set_viewing_student( $user ); // store to session
       header( "Location: student.php?user_id=$user_id" );
-      // display_notice( "Viewing report for " . $user->get_full_name(), 'success' );
     } else {
       $search = $_GET['student_search_term'];
       display_notice( "User <strong>$search</strong> not found.", 'error' );

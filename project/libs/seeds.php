@@ -87,6 +87,7 @@
       id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
       psid varchar(255) NOT NULL,
       author_id varchar(255),
+      session_id int,
       dashed_timestamp varchar(255) NOT NULL,
       UNIQUE INDEX psid_timestamp( psid, dashed_timestamp )
       )";

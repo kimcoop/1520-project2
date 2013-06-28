@@ -22,12 +22,16 @@
       return parent::make_date( $this->dashed_timestamp );
     }
 
-    public function get_author() {
+    public function get_author_full_name() {
       $author = User::find_by_user_id( $this->author_id );
       if ( $author )
-        return $author;
+        return $author->get_full_name();
       else
-        return "(author not found)";
+        return "Author not found";
+    }
+
+    public function notes() {
+      return Note::find_by_session_id( $this->id );
     }
   
 

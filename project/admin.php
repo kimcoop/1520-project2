@@ -40,7 +40,7 @@
           </select>
           <br>
           <br>
-          <button name="add_user_form_submit" type="submit" class="btn">Create user</button>
+          <button name="add_user_form_submit" type="submit" class="btn btn-large">Create user</button>
         </fieldset>
       </form>
     </div>
@@ -58,7 +58,7 @@
           </select>
           <br>
           <br>
-          <button name="delete_user_form_submit" type="submit" class="btn">Delete user</button>
+          <button name="delete_user_form_submit" type="submit" class="btn btn-large">Delete user</button>
         </fieldset>
       </form>
     </div>
@@ -72,7 +72,7 @@
           <input type="text" placeholder="Filename" name="filename">
           <br>
           <br>
-          <button name="add_course_form_submit" type="submit" class="btn">Load file</button>
+          <button name="add_course_form_submit" type="submit" class="btn btn-large">Load file</button>
         </fieldset>
       </form>
     </div>
@@ -90,7 +90,7 @@
     <strong>Sorry</strong> You must be logged in to view this page.
   </div>
 
-  <a class="btn btn-primary" href="index.php">Login</a>
+  <a class="btn btn-large btn btn-large-primary" href="index.php">Login</a>
 
 
 <?php 

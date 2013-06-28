@@ -2,19 +2,22 @@
 
 <table class="table table-hover">
 
-  <?php
-    
+<?php
     $notes = Note::find_all_by_psid( $student->get_psid() );
+    if ( count($notes) > 0 ) { ?>
+    
+      <thead>
+        <th></th>
+        <th>Date</th>
+        <th>Author</th>
+      </thead>
 
-    if ( count($notes) > 0 ) {
-
-      foreach( $notes as $index => $note ) {
-        ?>
+      <?php foreach( $notes as $index => $note ) { ?>
 
         <tr>
           <td class="muted"><?php echo $index + 1 ?></td>
           <td><?php echo $note; ?></td>
-          <td><?php echo $note->get_author()->get_full_name() ?></td>
+          <td><?php echo $note->get_author_full_name() ?></td>
           <td>
             <?php
 

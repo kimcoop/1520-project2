@@ -6,7 +6,7 @@
       $ADVISOR_ACCESS_LEVEL = 1,
       $ADMIN_ACCESS_LEVEL = 2;
 
-    public $is_logging_session = FALSE; // (advisor only)
+    public $is_logging_session = FALSE, $logging_session_id; // (advisor only)
     public $courses; // (student only)
 
     private $access_level, 
@@ -51,6 +51,14 @@
 
     function set_is_logging_session( $is_logging_session ) {
       $this->is_logging_session = $is_logging_session;
+    }
+
+    function get_logging_session_id() {
+      return $this->logging_session_id;
+    }
+
+    function set_logging_session_id( $logging_session_id ) {
+      $this->logging_session_id = $logging_session_id;
     }
 
     public function change_password( $old_password, $new_password, $new_password_confirm ) {
@@ -290,7 +298,7 @@
       return $user;
     }
 
-    public static function find_user_by_psid_or_name( $search_term ) {
+    public static function find_by_psid_or_name( $search_term ) {
       $user = User::find_by_psid( $search_term );
       if ( !$user )
         $user = User::find_by_full_name( $search_term );

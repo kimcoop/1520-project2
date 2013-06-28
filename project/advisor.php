@@ -30,7 +30,6 @@
           <h3>Search for a Student</h3>
           <form action="routes.php" method="get" name="search_student_form">
             <input class="input-block-level" autofocus placeholder="<PeopleSoft #> or <FirstName LastName>" type="text" name="student_search_term">
-            
             <button type="submit" class="btn-block btn-large btn-primary btn" name="search_student_form_submit">
               <i class="icon-search"></i>&nbsp;
               Search students
@@ -45,7 +44,6 @@
           <form action="routes.php" method="get" name="search_course_form">
             <input class="input-small" placeholder="Department" type="text" name="department">
             <input placeholder="Course number" type="text" name="course_number">
-            
             <button type="submit" class="btn-block btn-large btn-primary btn" name="search_course_form_submit">
               <i class="icon-search"></i>&nbsp;
               Search courses

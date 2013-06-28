@@ -45,6 +45,7 @@
 
     ?> 
     <form action="routes.php" method="post" name="advising_notes_form">
+      <input type="hidden" value="<?php echo current_user()->get_logging_session_id() ?>" name="session_id" />
       <textarea <?php if ( !current_user()->is_logging_session() ) echo 'disabled'; ?> class="input-block-level" name="note_content" rows="11" placeholder="Notes"></textarea>
       <button <?php if ( !current_user()->is_logging_session() ) echo 'disabled'; ?> class="btn btn-block btn-primary" type="submit" name="advising_notes_form_submit">Add notes to current session</button>
     </form>
