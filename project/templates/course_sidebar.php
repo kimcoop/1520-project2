@@ -15,7 +15,10 @@
         <?php echo $course->get_total_students(); ?>
       </p>
 
-    <a href="advisor.php" class="btn btn-block btn-primary">Back to search</a>
+    <a href="advisor.php" class="btn btn-block btn-primary">
+      <i class="icon icon-chevron-left"></i>&nbsp;
+      Back to search
+    </a>
 
   </aside>
 

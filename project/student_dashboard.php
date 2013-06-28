@@ -10,6 +10,7 @@
   <div class="hgroup">
     
     <h2>
+      <i class="icon-dashboard"></i>&nbsp;
       <?php echo current_user()->get_first_name(); ?>'s
       <span class="light"><?php echo current_user()->get_role() ?> Dashboard</span>
     </h2>

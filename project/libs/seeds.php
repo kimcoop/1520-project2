@@ -1,7 +1,6 @@
 <?php
 
   include( 'libs/db.php' );
-  include( 'libs/storable_interface.php' );
   include( 'libs/model.php' );
 
   include( 'models/user.php' );
@@ -18,10 +17,11 @@
   function clean() {
     echo "Cleaning out notes directory...<br/>";
     $notes = glob( 'files/notes/*' ); // get all file names
-    if ( !$notes ) return;
-    foreach( $notes as $note ){ // iterate files
-      if ( is_file( $note ) )
-        unlink( $note ); // delete file
+    if ( $notes ) {
+      foreach( $notes as $note ){ // iterate files
+        if ( is_file( $note ) )
+          unlink( $note ); // delete file
+      }
     }
 
     echo "Resetting tables in database...<br/>";

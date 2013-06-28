@@ -9,7 +9,7 @@
       <thead>
         <th></th>
         <th>Date</th>
-        <th>Author</th>
+        <th>Advisor</th>
       </thead>
 
       <?php foreach( $notes as $index => $note ) { ?>

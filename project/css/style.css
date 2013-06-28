@@ -14,6 +14,12 @@ body {
   margin: 0;
 }
 
+figcaption {
+  word-wrap: break-word;
+  line-height: 0.8em;
+  display: inline-block;
+}
+
 .container.main {
   min-height: 100%;
   height: auto !important;
@@ -281,5 +287,5 @@ aside .btn {
     padding-left: 20px;
     padding-right: 20px;
   }
-  
+ 
 }

@@ -59,10 +59,14 @@
           <form action="routes.php" method="post" name="delete_user_form">
 
             <fieldset>
-              <label>User</label>
+              <label>User (last name, first name)</label>
               <select class="input-block-level" name="psid">
-                <?php foreach( User::find_all() as $user ): ?>
-                  <option value="<?php echo $user->get_psid()?>"><?php echo $user->get_full_name() ?></option>
+                <?php 
+                  $users = User::find_all();
+                  usort( $users, 'sort_by_last_name' );
+                  foreach( $users as $user ): 
+                ?>
+                  <option value="<?php echo $user->get_psid()?>"><?php echo $user->get_last_name() .", ". $user->get_first_name() ?></option>
                 <?php endforeach; ?>
               </select>
               <br>

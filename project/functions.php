@@ -96,6 +96,13 @@ function get_root_url() {
     return 'advisor.php';
 }
 
+function sort_by_last_name( $a, $b ) {
+  if ( $a->get_last_name() == $b->get_last_name() )
+    return 0;
+  else
+    return ( $a->get_last_name() < $b->get_last_name() ? -1 : 1 );
+}
+
 function sort_by_term( $a, $b ) {
   if ( $a->term == $b->term )
     return 0;

@@ -133,7 +133,7 @@
     if ( current_user()->change_password( $_POST['old_password'], $_POST['new_password'], $_POST['new_password_confirm'] ))
       display_notice( 'Password changed.', 'success' );
     else
-      display_notice( '<strong>Error changing password.</strong> Please ensure you\'ve properly entered your current password and that new passwords match.', 'error' );
+      display_notice( '<strong>Error changing password.</strong> Please ensure you\'ve properly entered your current password and that your new password and confirmation match.', 'error' );
     header( "Location: settings.php" );
     exit();
   }

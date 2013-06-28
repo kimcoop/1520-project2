@@ -7,7 +7,7 @@
       <thead>
         <th></th>
         <th>Date</th>
-        <th>Author</th>
+        <th>Advisor</th>
         <th># Notes</th>
       </thead>
     <?php foreach( $sessions as $index => $session ): ?>

@@ -12,7 +12,14 @@
     <div class="main-content span9">
       
       <div class="hgroup">
-        <h2>Details for Course: <?php echo $course ?></h2>
+        <h2>
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-pencil icon-light"></i>
+          </span>
+          <?php echo $course ?>
+          <small>Course details</small>
+        </h2>
         <?php include('templates/notice.php') ?>
 
       </div><!-- .hgroup -->
@@ -33,7 +40,7 @@
             foreach( $user_courses as $index => $user_course ): 
           ?>
             <tr>
-              <td class="muted"><?php echo $index ?></td>
+              <td class="muted"><?php echo $index +1 ?></td>
               <td><?php echo $user_course->term ?></td>
               <td><?php echo $user_course->psid ?></td>
               <?php if ( $user = $user_course->user() ): ?> 

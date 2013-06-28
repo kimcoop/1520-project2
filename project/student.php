@@ -14,7 +14,14 @@
       <div class="main-content span9">
         
         <div class="hgroup">
-          <h2>Details for Student: <?php echo $student->get_full_name() ?></h2>
+          <h2>
+            <span class="icon-stack">
+              <i class="icon-circle icon-stack-base"></i>
+              <i class="icon-user icon-light"></i>
+            </span>
+            <?php echo $student->get_full_name() ?>
+            <small>Student details</small>
+          </h2>
           <?php include('templates/notice.php') ?>
 
         </div><!-- .hgroup -->

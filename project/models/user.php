@@ -45,6 +45,25 @@
       return round($total_points / $total_user_courses, 2);
     }
 
+      /**
+     * Get either a Gravatar URL or complete image tag for a specified email address.
+     *
+     * @param string $s Size in pixels, defaults to 80px [ 1 - 2048 ]
+     * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
+     * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
+     * @param array $atts Optional, additional key/value attributes to include in the IMG tag
+     * @return String containing either just a URL or a complete image tag
+     * @source http://gravatar.com/site/implement/images/php/
+     */
+    function get_gravatar( $s = 80, $d = 'mm', $r = 'g', $atts = array() ) {
+      $email = $this->get_email();
+      $url = 'http://www.gravatar.com/avatar/';
+      $url .= md5( strtolower( trim( $email ) ) );
+      $url .= "?s=$s&d=$d&r=$r";
+      return $url;
+    }
+
+
     function is_logging_session() {
       return $this->is_logging_session;
     }
@@ -85,9 +104,9 @@
     public function set_secret_question( $question, $answer ) {
 
       $question = addslashes( $question );
-      $answer = addslashes( $answer );
+      $answer = hash( 'sha256', addslashes( $answer ) );
       $this->secret_question = $question;
-      $this->secret_answer = hash( 'sha256', $answer );
+      $this->secret_answer = $answer;
 
       return User::update( 'users', $this, "secret_question='$question', secret_answer='$answer'" );
     }
@@ -165,7 +184,7 @@
       return $this->secret_answer;
     }
 
-    public function set_all( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id, $question, $answer ) {
+    public function set_all( $access_level, $email, $first_name, $last_name, $password, $psid, $user_id, $question=NULL, $answer=NULL ) {
       $this->access_level = $access_level;
       $this->email = $email;
       $this->first_name = $first_name;
