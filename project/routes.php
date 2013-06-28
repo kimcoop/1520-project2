@@ -146,7 +146,7 @@
   if ( was_posted('log_advising_session_form_submit') ) {
     if ( Session::log_advising_session( $_SESSION['viewing_psid'] )) {
       current_user()->set_is_logging_session( TRUE );
-      display_notice( 'Advising session logged.', 'success' );
+      display_notice( 'Logging current advising session.', 'success' );
     } else {
       display_notice( 'Error logging advising session.', 'error' );
     }

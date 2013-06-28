@@ -12,8 +12,8 @@
       
       <div class="hgroup">
         <h2>
-          <?php echo current_user()->get_first_name(); ?>'s 
-          <span class="light"><?php echo current_user()->get_role() ?> Dashboard</span>
+          <i class="icon-dashboard"></i>&nbsp;
+          <?php echo current_user()->get_role() ?> Dashboard
         </h2>
         <?php include('templates/notice.php') ?>
       </div><!-- .hgroup -->
@@ -31,7 +31,7 @@
           <form action="routes.php" method="get" name="search_student_form">
             <input class="input-block-level" autofocus placeholder="<PeopleSoft #> or <FirstName LastName>" type="text" name="student_search_term">
             
-            <button type="submit" class="btn-block btn-primary btn" name="search_student_form_submit">
+            <button type="submit" class="btn-block btn-large btn-primary btn" name="search_student_form_submit">
               <i class="icon-search"></i>&nbsp;
               Search students
             </button>
@@ -46,7 +46,7 @@
             <input class="input-small" placeholder="Department" type="text" name="department">
             <input placeholder="Course number" type="text" name="course_number">
             
-            <button type="submit" class="btn-block btn-primary btn" name="search_course_form_submit">
+            <button type="submit" class="btn-block btn-large btn-primary btn" name="search_course_form_submit">
               <i class="icon-search"></i>&nbsp;
               Search courses
             </button>

@@ -61,17 +61,22 @@
         $reqs = Requirement::find_all();
 
         ksort( $reqs );
-        foreach( $reqs as $req ) {
+        foreach( $reqs as $index => $req ) {
         ?>
           <tr>  
-            <td><?php echo $req->title; ?></td>
+            <td class="muted"><?php echo $index + 1?></td>
+            <td><strong><?php echo $req->title; ?></strong></td>
             <td>
               <?php if ( $course = $req->get_satisfying_course( $student->get_psid() ) ) { ?>
-                <span class='text-success'>S</span>
+                <span class='text-success'>
+                  <i class="icon icon-check"></i>
+                </span>
               <?php
                 } else { 
               ?>
-                <span class='text-error'>N</span>
+                <span class='text-error'>
+                  <i class="icon icon-check-empty"></i>
+                </span>
               <?php } ?>
             </td>
             <td>
@@ -81,7 +86,7 @@
               if ( $course ) {
                 echo $course;
               } else {
-                echo "<span class='muted'>Courses that satisfy this requirement: ";
+                echo "<span class='muted'>Requirement not satisfied. Course options: ";
                 echo $req->get_requirements();
                 echo "</span>";
               }

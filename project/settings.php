@@ -7,10 +7,9 @@
 ?>
   
   <div class="hgroup">
-    <h2>Settings</h2>
+    <h2><i class="icon icon-cog"></i>&nbsp;Settings</h2>
     <?php include('templates/notice.php') ?>
 
-    <hr class="dotted">
   </div><!-- .hgroup -->
 
 
